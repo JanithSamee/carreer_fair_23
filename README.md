@@ -20,6 +20,7 @@
 -   /student/uploadCV
 -   /student/getCV
 -   /student/getInterviews
+-   /student/getPreferences
 -   /student/updateInterviews
 -   /student/updateProfilePhoto
 

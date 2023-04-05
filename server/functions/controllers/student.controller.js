@@ -1,5 +1,5 @@
 import { auth } from "../db/exporter.js";
-import Student from "../models/studentModel.js";
+import Student from "../models/student.model.js";
 import { generateToken } from "../utils/authHelper.js";
 import { formatError, validateIndex } from "../utils/formatData.js";
 
@@ -46,9 +46,42 @@ async function signUp(req, res) {
                 res.status(500).send({ error: true, data: formatError(error) });
             });
     } catch (error) {
-        console.error(error);
         res.status(500).send({ error: true, data: formatError(error) });
     }
 }
 
-export { signUp };
+async function updateUser(req, res) {
+    try {
+        const indexNumber = "190542V"; // TODO: edit with middleware
+        let {
+            username,
+            firstName,
+            lastName,
+            cvURL,
+            preferenceCarrierChoise,
+            profilePhoto,
+        } = req.body;
+
+        username = username || "";
+        firstName = firstName || "";
+        lastName = lastName || "";
+        cvURL = cvURL || "";
+        profilePhoto = profilePhoto || "";
+        preferenceCarrierChoise = preferenceCarrierChoise || [];
+
+        const user = await Student.updateById(indexNumber, {
+            username,
+            firstName,
+            lastName,
+            cvURL,
+            preferenceCarrierChoise,
+            profilePhoto,
+        });
+
+        res.json({ error: false, data: user ? user.get() : [] });
+    } catch (error) {
+        res.status(500).send({ error: true, data: formatError(error) });
+    }
+}
+
+export { signUp, updateUser };

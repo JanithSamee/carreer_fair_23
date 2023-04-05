@@ -42,6 +42,22 @@ class Student {
         }
     }
 
+    get() {
+        return {
+            indexNumber: this.indexNumber,
+            email: this.email,
+            username: this.username,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            cvURL: this.cvURL,
+            preferenceCarrierChoise: this.preferenceCarrierChoise,
+            preferenceList: this.preferenceList,
+            interviewsList: this.interviewsList,
+            profilePhoto: this.profilePhoto,
+            createdAt: this.createdAt,
+        };
+    }
+
     // Find a user by ID in Firestore
     static async findById(id) {
         try {
@@ -58,15 +74,16 @@ class Student {
     static async updateById(userId, updatedData) {
         try {
             const userRef = usersCollection.doc(userId);
-            const userDoc = await userRef.update(updatedData);
+            await userRef.update(updatedData);
+            const userDoc = await userRef.get();
             // console.log(`User with ID ${userId} updated successfully.`);
             if (userDoc.exists) {
                 const userData = userDoc.data();
-                return new User(userData);
+                return new Student(userData);
             }
             return null;
         } catch (error) {
-            throw new Error({ message: "Error updating user." });
+            throw error;
         }
     }
 }
