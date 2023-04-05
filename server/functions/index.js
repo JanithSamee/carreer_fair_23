@@ -5,6 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 
 import functions from "firebase-functions";
+import router from "./routes/_index.routes.js";
 
 const app = express();
 
@@ -14,7 +15,9 @@ const FRONT_END_URL = process.env.FRONT_END_URL;
 
 app.use(cors({ origin: NODE_ENV === "dev" ? "*" : FRONT_END_URL }));
 
-app.get("/test/", (req, res) => {
+app.use("/v1/", router);
+
+app.get("/v1/test/", (req, res) => {
     const time = new Date();
     console.info("Test OK!");
     console.info(ENV_TEST);
