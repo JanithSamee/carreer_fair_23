@@ -8,7 +8,7 @@
 -   indexNumber
 -   email
 -   CVUrl
--   preferenceCarrierChoise
+-   preferenceCarrierChoise []
 -   profilePhoto
 -   preferenceList []
 -   interviewsList []
