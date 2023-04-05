@@ -1,0 +1,11 @@
+{
+  "name": "career-fair-23-api",
+  "version": "1.0.0",
+  "description": "Official Career Fair of deparment of electrical engineering University of Moratuwa",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}
