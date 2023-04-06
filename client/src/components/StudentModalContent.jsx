@@ -1,5 +1,6 @@
 import { Avatar, Stack, Text } from "@chakra-ui/react";
 import CompanyList from "./CompanyList";
+import AddPrefComp from "./AddPrefComp";
 
 function StudentModalContent({ name, img_url, name_initial, index_number }) {
 	return (
@@ -9,6 +10,7 @@ function StudentModalContent({ name, img_url, name_initial, index_number }) {
 				<Text>{index_number}</Text>
 				<Text>{name_initial}</Text>
 				<CompanyList></CompanyList>
+				<AddPrefComp></AddPrefComp>
 			</Stack>
 		</div>
 	);

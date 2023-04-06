@@ -18,7 +18,7 @@ function CompanyList() {
 		{ com_name: "Wind Force", logo_url: "logo" },
 	];
 	const listComponent = company_data.map((company, idx) => (
-		<GridItem align="center">
+		<GridItem align="center" key={idx}>
 			<Box>
 				<Badge
 					ml={7}
