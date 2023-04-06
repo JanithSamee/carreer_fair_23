@@ -1,6 +1,7 @@
 import { auth } from "../db/exporter.js";
 import Student from "../models/student.model.js";
 import { generateToken } from "../utils/authHelper.js";
+import { resizeFile, uploadFileToStorage } from "../utils/fileHandling.js";
 import {
     formatCompaniesAsRef,
     formatCompaniesQueueAsRef,
@@ -191,6 +192,62 @@ async function getUser(req, res) {
     }
 }
 
+async function updateProfilePicture(req, res) {
+    const _file = req.file;
+    const indexNumber = "190542V"; // TODO: edit with middleware
+    console.log(_file);
+    try {
+        if (_file) {
+            const compressed = await resizeFile(_file.buffer);
+
+            const result = await uploadFileToStorage(
+                compressed,
+                "student/profile-pictures/" + indexNumber + ".jpeg"
+            );
+
+            await Student.updateById(indexNumber, {
+                profilePhoto: result.publicUrl(),
+            });
+
+            return res.status(404).send({
+                error: false,
+                message: "File uploaded successfully",
+            });
+        }
+        res.status(404).send({ error: true, message: "File Not Found" });
+    } catch (error) {
+        console.error(error);
+        res.status(404).send({ error: true, message: "Something went wrong" });
+    }
+}
+async function uploadCV(req, res) {
+    const _file = req.file;
+    const indexNumber = "190542V"; // TODO: edit with middleware
+    try {
+        if (_file) {
+            // const compressed = await resizeFile(_file.buffer);
+
+            const result = await uploadFileToStorage(
+                _file.buffer,
+                "student/cv/" + indexNumber + ".pdf"
+            );
+
+            await Student.updateById(indexNumber, {
+                profilePhoto: result.publicUrl(),
+            });
+
+            return res.status(404).send({
+                error: false,
+                message: "File uploaded successfully",
+            });
+        }
+        res.status(404).send({ error: true, message: "File Not Found" });
+    } catch (error) {
+        console.error(error);
+        res.status(404).send({ error: true, message: "Something went wrong" });
+    }
+}
+
 export {
     signUp,
     updateUser,
@@ -199,4 +256,6 @@ export {
     getUser,
     updateInterviews,
     updateInterviewsQueue,
+    updateProfilePicture,
+    uploadCV,
 };
