@@ -1,3 +1,5 @@
+import { db } from "../db/exporter.js";
+
 function formatError(error) {
     if (error.message && typeof error.message === "string") {
         return error.message;
@@ -15,4 +17,20 @@ function validateIndex(index = "sfds") {
     }
 }
 
-export { formatError, validateIndex };
+function formatCompaniesAsRef(companies) {
+    return companies.map((element) => db.collection("companies").doc(element));
+}
+function formatCompaniesQueueAsRef(companies) {
+    // statust = "assigned" | "ongoing" | "completed"
+    return companies.map((element) => ({
+        company: db.collection("companies").doc(element),
+        status: "assigned",
+    }));
+}
+
+export {
+    formatError,
+    validateIndex,
+    formatCompaniesAsRef,
+    formatCompaniesQueueAsRef,
+};
