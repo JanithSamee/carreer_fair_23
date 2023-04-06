@@ -83,7 +83,11 @@ async function updateUser(req, res) {
             preferenceCarrierChoise,
             profilePhoto,
         });
-
+        if (!user) {
+            return res
+                .status(400)
+                .send({ error: true, data: "Student does not found!" });
+        }
         res.json({ error: false, data: user ? user.get() : [] });
     } catch (error) {
         res.status(500).send({ error: true, data: formatError(error) });
@@ -244,7 +248,7 @@ async function uploadCV(req, res) {
         res.status(404).send({ error: true, message: "File Not Found" });
     } catch (error) {
         console.error(error);
-        res.status(404).send({ error: true, message: "Something went wrong" });
+        res.status(404).send({ error: true, message: formatError(error) });
     }
 }
 
