@@ -15,6 +15,7 @@ class Student {
         this.preferenceCarrierChoise = data.preferenceCarrierChoise || [];
         this.preferenceList = data.preferenceList || [];
         this.interviewsList = data.interviewsList || [];
+        this.interviewsQueue = data.interviewsQueue || [];
         this.profilePhoto = data.profilePhoto || "";
         this.createdAt = data.createdAt || new Date();
     }
@@ -53,6 +54,7 @@ class Student {
             preferenceCarrierChoise: this.preferenceCarrierChoise,
             preferenceList: this.preferenceList,
             interviewsList: this.interviewsList,
+            interviewsQueue: this.interviewsQueue,
             profilePhoto: this.profilePhoto,
             createdAt: this.createdAt,
         };
@@ -62,9 +64,10 @@ class Student {
     static async findById(id) {
         try {
             const userDoc = await usersCollection.doc(id).get();
+
             if (userDoc.exists) {
                 const userData = userDoc.data();
-                return new User(userData);
+                return new Student(userData);
             }
             return null;
         } catch (error) {
@@ -85,6 +88,17 @@ class Student {
         } catch (error) {
             throw error;
         }
+    }
+
+    static async getUsers() {
+        const users = await usersCollection
+            .select("firstName", "lastName", "indexNumber", "profilePhoto")
+            .get();
+
+        let data = users.docs;
+
+        data = data.map((user) => new Student(user.data()));
+        return data;
     }
 }
 

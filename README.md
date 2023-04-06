@@ -12,16 +12,19 @@
 -   profilePhoto
 -   preferenceList []
 -   interviewsList []
+-   interviewQueue []
 
 ### API Structure
 
 -   /student/signup
 -   /student/update
--   /student/uploadCV
+-   /student/getStudents
+-   /student/getStudent
 -   /student/getCV
--   /student/getInterviews
--   /student/getPreferences
+-   /student/uploadCV
 -   /student/updateInterviews
+-   /student/updateInterviesQueue
+-   /student/updatePreferences
 -   /student/updateProfilePhoto
 
 ## Company
@@ -54,8 +57,18 @@
 
 ### API Structure
 
--   /admin/updateInterviews
 -   /admin/getInterviewsPerCompany
--   /admin/getStudents
 -   /admin/getCompanies
 -   /admin/getCV
+
+## Global
+
+### Modal
+
+-   registrationDeadLine
+-   eventDate
+
+### API Structure
+
+-   /global/setRegistrationDeadLine
+-   /global/setEventDate
