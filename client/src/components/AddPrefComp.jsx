@@ -14,13 +14,13 @@ import {
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, CloseIcon } from "@chakra-ui/icons";
 import { useState } from "react";
+import CloseButton from "./CloseButton";
 
 function AddPrefComp() {
 	const [company, setCompany] = useState("undefined");
 	const [time, setTime] = useState();
 	const [error, setError] = useState();
 	const [interveiwList, setInterveiwList] = useState([{}]);
-	const [closingInterveiw, setClosingInterveiw] = useState();
 
 	const handleChangeCompany = (e) => setCompany(e.target.value);
 	const handleChangeTime = (e) => setTime(e.target.value);
@@ -55,17 +55,11 @@ function AddPrefComp() {
 				<Text fontSize="xs">{interveiw.company}</Text>
 			</Box>
 			<Spacer></Spacer>
-			<Box>
-				<span hidden={interveiw.company === undefined}>
-					<IconButton
-						variant="ghost"
-						icon={<CloseIcon fontSize="8px" />}
-						size="35px"
-						m={1}
-						colorScheme="red"
-					></IconButton>
-				</span>
-			</Box>
+			<CloseButton
+				interveiw={interveiw}
+				interveiwList={interveiwList}
+				setInterveiwList={setInterveiwList}
+			></CloseButton>
 		</Flex>
 	));
 
