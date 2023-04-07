@@ -120,4 +120,33 @@ async function updateProfilePicture(req, res) {
     }
 }
 
-export { addCompany, updateCompany, updateProfilePicture };
+async function getComapnies(req, res) {
+    try {
+        const companies = await Company.getCompanies();
+        res.json({ error: false, data: companies });
+    } catch (error) {
+        res.status(500).send({ error: true, data: formatError(error) });
+    }
+}
+async function getCompany(req, res) {
+    try {
+        const { companyId } = req.query;
+        const company = await Company.findById(companyId);
+        if (!company) {
+            return res
+                .status(404)
+                .send({ error: true, data: "Company does not found!" });
+        }
+        res.json({ error: false, data: company });
+    } catch (error) {
+        res.status(500).send({ error: true, data: formatError(error) });
+    }
+}
+
+export {
+    addCompany,
+    updateCompany,
+    updateProfilePicture,
+    getComapnies,
+    getCompany,
+};

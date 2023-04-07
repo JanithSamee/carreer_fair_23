@@ -45,6 +45,8 @@
 -   /company/add
 -   /company/update
 -   /company/updateProfilePhoto
+-   /company/getCompany
+-   /company/getCompanies
 
 ## Admin
 
@@ -55,9 +57,8 @@
 
 ### API Structure
 
--   /admin/getInterviewsPerCompany
--   /admin/getCompanies
--   /admin/getCV
+-   /admin/exportData
+-   /admin/add
 
 ## Global
 
