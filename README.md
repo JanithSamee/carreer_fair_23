@@ -34,7 +34,7 @@
 -   name
 -   email
 -   profilePhoto
--   studentCount
+-   maximumInterviews
 -   interviewsList []
 -   startTime
 -   endTime
@@ -44,8 +44,6 @@
 
 -   /company/add
 -   /company/update
--   /company/updateInterviewList
--   /company/updateInterview
 -   /company/updateProfilePhoto
 
 ## Admin
