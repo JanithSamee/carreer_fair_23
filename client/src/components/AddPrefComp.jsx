@@ -7,21 +7,36 @@ import {
 	FormLabel,
 	Select,
 	Button,
-	IconButton,
 	Spacer,
 	Flex,
-	Avatar,
 } from "@chakra-ui/react";
-import { ArrowForwardIcon, CloseIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { useState, useEffect } from "react";
 import CloseButton from "./CloseButton";
+import axios from "axios";
 
 function AddPrefComp() {
+	//states
 	const [company, setCompany] = useState("undefined");
 	const [time, setTime] = useState();
 	const [error, setError] = useState();
 	const [interveiwList, setInterveiwList] = useState([{}]);
-
+	const [companyList, setCompanyList] = useState([{}]);
+	//APIs
+	useEffect(() => {
+		axios
+			.get("https://dog.ceo/api/breeds/image/random")
+			.then((response) =>
+				setCompanyList([
+					{ company_name: "WSO2" },
+					{ company_name: "LSEG" },
+					{ company_name: "CEB" },
+					{ company_name: "RMA" },
+				])
+			)
+			.catch((error) => console.error(error));
+	}, []);
+	//event handling
 	const handleChangeCompany = (e) => setCompany(e.target.value);
 	const handleChangeTime = (e) => setTime(e.target.value);
 	function handleAssign() {
@@ -40,8 +55,7 @@ function AddPrefComp() {
 			}
 		}
 	}
-	console.log(interveiwList);
-
+	//mapped components
 	const assignedInterveiws = interveiwList.map((interveiw, idx) => (
 		<Flex
 			boxShadow="sm"
@@ -62,6 +76,9 @@ function AddPrefComp() {
 			></CloseButton>
 		</Flex>
 	));
+	const companies = companyList.map((com, idx) => (
+		<option key={idx}>{com.company_name}</option>
+	));
 
 	return (
 		<div>
@@ -77,9 +94,7 @@ function AddPrefComp() {
 								required
 								onChange={handleChangeCompany}
 							>
-								<option>WSO2</option>
-								<option>LSEG</option>
-								<option>CEB</option>
+								{companies}
 							</Select>
 							<FormLabel fontSize="xs">Time Slot</FormLabel>
 							<Select
@@ -91,6 +106,10 @@ function AddPrefComp() {
 								<option>08.15</option>
 								<option>08.30</option>
 								<option>08.45</option>
+								<option>09.00</option>
+								<option>09.15</option>
+								<option>09.30</option>
+								<option>09.45</option>
 							</Select>
 						</FormControl>
 						<Button
