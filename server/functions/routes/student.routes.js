@@ -11,6 +11,7 @@ import {
     updateUser,
     uploadCV,
 } from "../controllers/student.controller.js";
+import autherenticateStudent from "../middleware/student.middleware.js";
 const studentRouter = Router();
 
 const storage = multer.memoryStorage();
@@ -24,22 +25,30 @@ const upload = multer({
 
 studentRouter.post("/sign-up", signUp);
 
-//TODO: add admin-student Middlewares
-studentRouter.get("/single", getUser);
+studentRouter.get("/single", autherenticateStudent, getUser);
 
 //TODO: add admin Middlewares
 studentRouter.get("/all", getUsers);
 studentRouter.post("/update-interviews", updateInterviews);
 studentRouter.post("/update-interviews-queue", updateInterviewsQueue);
 
-//TODO: add student Middlewares
-studentRouter.post("/update", updateUser);
-studentRouter.post("/update-preferences", updatePreference);
+studentRouter.post("/update", autherenticateStudent, updateUser);
+studentRouter.post(
+    "/update-preferences",
+    autherenticateStudent,
+    updatePreference
+);
 studentRouter.post(
     "/update-profile-picture",
     upload.single("image"),
+    autherenticateStudent,
     updateProfilePicture
 );
-studentRouter.post("/update-cv", upload.single("cv"), uploadCV);
+studentRouter.post(
+    "/update-cv",
+    upload.single("cv"),
+    autherenticateStudent,
+    uploadCV
+);
 
 export { studentRouter };

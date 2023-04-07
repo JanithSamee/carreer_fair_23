@@ -2,6 +2,8 @@ import { Router } from "express";
 import multer from "multer";
 import {
     addCompany,
+    getComapnies,
+    getCompany,
     updateCompany,
     updateProfilePicture,
 } from "../controllers/company.controller.js";
@@ -16,6 +18,11 @@ const upload = multer({
     },
 });
 
+// TODO: student-admin Autherentications
+companyRouter.get("/all", getComapnies);
+companyRouter.get("/single", getCompany);
+
+// TODO: admin Autherentications
 companyRouter.post("/add", addCompany);
 companyRouter.post("/update", updateCompany);
 companyRouter.post(

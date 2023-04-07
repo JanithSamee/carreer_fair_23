@@ -85,7 +85,7 @@ class Company {
     }
 
     static async getCompanies() {
-        const companies = await usersCollection
+        const companies = await companiesCollection
             .select("name", "companyId", "profilePhoto")
             .get();
 

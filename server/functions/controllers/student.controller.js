@@ -58,7 +58,7 @@ async function signUp(req, res) {
 
 async function updateUser(req, res) {
     try {
-        const indexNumber = "190542V"; // TODO: edit with middleware
+        const indexNumber = req.user.uid;
         let {
             username,
             firstName,
@@ -97,8 +97,8 @@ async function updateUser(req, res) {
 async function updatePreference(req, res) {
     try {
         const { preferences } = req.body;
-        const indexNumber = "190542V"; // TODO: edit with middleware
-        const registrationDdl = new Date("2023-04-06T12:00:00Z"); //TODO: Get from global data
+        const indexNumber = req.user.uid;
+        const registrationDdl = new Date("2023-04-10T12:00:00Z"); //TODO: Get from global data
         const currentDate = new Date();
         if (!preferences || !Array.isArray(preferences)) {
             return res.status(400).send({
@@ -188,8 +188,19 @@ async function getUsers(req, res) {
 }
 async function getUser(req, res) {
     try {
-        const { indexNumber } = req.query;
+        let indexNumber = "";
+        if (req.user.role === "student") {
+            indexNumber = req.user.uid;
+        } else {
+            indexNumber = req.query.indexNumber;
+        }
+
         const user = await Student.findById(indexNumber);
+        if (!user) {
+            return res
+                .status(404)
+                .send({ error: true, data: "User does not found!" });
+        }
         res.json({ error: false, data: user });
     } catch (error) {
         res.status(500).send({ error: true, data: formatError(error) });
