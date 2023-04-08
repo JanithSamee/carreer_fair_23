@@ -69,5 +69,10 @@
 
 ### API Structure
 
--   /global/setRegistrationDeadLine
--   /global/setEventDate
+-   /global/setParams
+-   /global/getParams
+
+## Second Interation
+
+-   coordinator role with coordinator dashboard
+-   changePassword/Reset Password

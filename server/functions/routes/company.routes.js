@@ -7,6 +7,8 @@ import {
     updateCompany,
     updateProfilePicture,
 } from "../controllers/company.controller.js";
+import autherenticateAdmin from "../middleware/admin.middleware.js";
+import autherenticateStudent from "../middleware/student.middleware.js";
 const companyRouter = Router();
 
 const storage = multer.memoryStorage();
@@ -18,16 +20,17 @@ const upload = multer({
     },
 });
 
-// TODO: student-admin Autherentications
-companyRouter.get("/all", getComapnies);
-companyRouter.get("/single", getCompany);
+// student-admin Autherentications
+companyRouter.get("/all", autherenticateStudent, getComapnies);
+companyRouter.get("/single", autherenticateStudent, getCompany);
 
-// TODO: admin Autherentications
-companyRouter.post("/add", addCompany);
-companyRouter.post("/update", updateCompany);
+// admin Autherentications
+companyRouter.post("/add", autherenticateAdmin, addCompany);
+companyRouter.post("/update", autherenticateAdmin, updateCompany);
 companyRouter.post(
     "/update-profile-picture",
     upload.single("image"),
+    autherenticateAdmin,
     updateProfilePicture
 );
 
