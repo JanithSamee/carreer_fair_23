@@ -123,7 +123,7 @@ async function updatePreference(req, res) {
             preferenceList: preferenceRef,
         });
 
-        res.json({ error: false, data: preferences });
+        res.json({ error: false, data: preferenceRef });
     } catch (error) {
         res.status(500).send({ error: true, data: formatError(error) });
     }

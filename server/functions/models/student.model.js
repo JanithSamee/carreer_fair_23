@@ -100,6 +100,14 @@ class Student {
         data = data.map((user) => new Student(user.data()));
         return data;
     }
+    static async getUsersComplete() {
+        const users = await usersCollection.get();
+
+        let data = users.docs;
+
+        data = data.map((user) => new Student(user.data()));
+        return data;
+    }
 }
 
 export default Student;
