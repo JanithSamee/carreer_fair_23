@@ -32,6 +32,16 @@ function CompanyModal({ isOpen, onClose, title, companyName, companyDes }) {
 					<FormControl>
 						<Box align="center">
 							<Avatar name={companyName}></Avatar>
+							<Input
+								type="file"
+								size="xs"
+								zIndex={100}
+								opacity={0}
+								w={10}
+								mt={2}
+								ml={-50}
+								hidden={title === "Add Company"}
+							></Input>
 						</Box>
 						<FormLabel fontSize="xs" mb={0.5}>
 							Company Name
