@@ -11,6 +11,7 @@ import {
     updateUser,
     uploadCV,
 } from "../controllers/student.controller.js";
+import autherenticateAdmin from "../middleware/admin.middleware.js";
 import autherenticateStudent from "../middleware/student.middleware.js";
 const studentRouter = Router();
 
@@ -27,11 +28,16 @@ studentRouter.post("/sign-up", signUp);
 
 studentRouter.get("/single", autherenticateStudent, getUser);
 
-//TODO: add admin Middlewares
-studentRouter.get("/all", getUsers);
-studentRouter.post("/update-interviews", updateInterviews);
-studentRouter.post("/update-interviews-queue", updateInterviewsQueue);
+//Add admin Middlewares
+studentRouter.get("/all", autherenticateAdmin, getUsers);
+studentRouter.post("/update-interviews", autherenticateAdmin, updateInterviews);
+studentRouter.post(
+    "/update-interviews-queue",
+    autherenticateAdmin,
+    updateInterviewsQueue
+);
 
+//Student Middlewares
 studentRouter.post("/update", autherenticateStudent, updateUser);
 studentRouter.post(
     "/update-preferences",

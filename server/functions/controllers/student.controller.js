@@ -58,7 +58,12 @@ async function signUp(req, res) {
 
 async function updateUser(req, res) {
     try {
-        const indexNumber = req.user.uid;
+        let indexNumber = "";
+        if (req.user.role === "student") {
+            indexNumber = req.user.uid;
+        } else {
+            indexNumber = req.body.indexNumber;
+        }
         let {
             username,
             firstName,
@@ -118,15 +123,14 @@ async function updatePreference(req, res) {
             preferenceList: preferenceRef,
         });
 
-        res.json({ error: false, data: preferences });
+        res.json({ error: false, data: preferenceRef });
     } catch (error) {
         res.status(500).send({ error: true, data: formatError(error) });
     }
 }
 async function updateInterviews(req, res) {
-    const indexNumber = "190542V"; // TODO: edit with middleware
     try {
-        const { interviews } = req.body;
+        const { interviews, indexNumber } = req.body;
 
         if (!interviews || !Array.isArray(interviews)) {
             return res.status(400).send({
@@ -209,7 +213,7 @@ async function getUser(req, res) {
 
 async function updateProfilePicture(req, res) {
     const _file = req.file;
-    const indexNumber = "190542V"; // TODO: edit with middleware
+    const indexNumber = req.user.uid; // TODO: edit with middleware
     console.log(_file);
     try {
         if (_file) {
@@ -237,7 +241,7 @@ async function updateProfilePicture(req, res) {
 }
 async function uploadCV(req, res) {
     const _file = req.file;
-    const indexNumber = "190542V"; // TODO: edit with middleware
+    const indexNumber = req.user.uid; // TODO: edit with middleware
     try {
         if (_file) {
             // const compressed = await resizeFile(_file.buffer);

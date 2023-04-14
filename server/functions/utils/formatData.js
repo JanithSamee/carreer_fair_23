@@ -18,13 +18,17 @@ function validateIndex(index = "sfds") {
 }
 
 function formatCompaniesAsRef(companies) {
-    return companies.map((element) => db.collection("companies").doc(element));
+    return companies.map((element) => ({
+        ref: db.collection("companies").doc(element),
+        name: element,
+    }));
 }
 function formatCompaniesQueueAsRef(companies) {
     // statust = "assigned" | "ongoing" | "completed"
     return companies.map((element) => ({
         company: db.collection("companies").doc(element),
         status: "assigned",
+        name: element,
     }));
 }
 
