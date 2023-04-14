@@ -8,15 +8,66 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalCloseButton,
+	Avatar,
+	Box,
+	Text,
+	FormControl,
+	FormLabel,
+	Input,
+	NumberInputField,
+	NumberInputStepper,
+	NumberIncrementStepper,
+	NumberDecrementStepper,
+	NumberInput,
+	Textarea,
 } from "@chakra-ui/react";
-function CompanyModal({ isOpen, onClose, onOpen, title }) {
+function CompanyModal({ isOpen, onClose, title, companyName, companyDes }) {
 	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader size="xs">{title}</ModalHeader>
 				<ModalCloseButton />
-				<ModalBody>TBA</ModalBody>
+				<ModalBody>
+					<FormControl>
+						<Box align="center">
+							<Avatar name={companyName}></Avatar>
+						</Box>
+						<FormLabel fontSize="xs" mb={0.5}>
+							Company Name
+						</FormLabel>
+						<Input
+							size="xs"
+							fontSize="xs"
+							placeholder={companyName}
+							w={200}
+						></Input>
+						<FormLabel fontSize="xs" mb={0.5}>
+							No. of Vacancies
+						</FormLabel>
+						<NumberInput max={30} min={1} size="xs" w={55}>
+							<NumberInputField />
+							<NumberInputStepper>
+								<NumberIncrementStepper />
+								<NumberDecrementStepper />
+							</NumberInputStepper>
+						</NumberInput>
+						{/* <FormLabel fontSize="xs" mb={0.5}>
+							Interveiw Start time
+						</FormLabel>
+						<Input
+							size="xs"
+							fontSize="xs"
+							placeholder={companyName}
+							w={100}
+							type="time"
+						></Input> */}
+						<FormLabel fontSize="xs" mb={0.5}>
+							Description
+						</FormLabel>
+						<Textarea size="xs" placeholder={companyDes}></Textarea>
+					</FormControl>
+				</ModalBody>
 
 				<ModalFooter>
 					<Button

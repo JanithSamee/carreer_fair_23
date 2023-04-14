@@ -1,7 +1,8 @@
-import { GridItem } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import CompanyCard from "./CompanyCard";
+import AddCompany from "./AddCompany";
 
 function CompanyCardsGrid() {
 	//states
@@ -32,7 +33,16 @@ function CompanyCardsGrid() {
 			></CompanyCard>
 		</GridItem>
 	));
-	return companyCards;
+	return (
+		<>
+			<Grid templateColumns="repeat(8, 2fr)" gap={2} alignItems="center">
+				{companyCards}
+				<GridItem>
+					<AddCompany></AddCompany>
+				</GridItem>
+			</Grid>
+		</>
+	);
 }
 
 export default CompanyCardsGrid;

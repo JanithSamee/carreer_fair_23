@@ -5,14 +5,6 @@ import {
 	Stack,
 	Heading,
 	useDisclosure,
-	Modal,
-	ModalBody,
-	ModalOverlay,
-	Button,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalCloseButton,
 } from "@chakra-ui/react";
 import CompanyModal from "./CompanyModal";
 
@@ -34,8 +26,9 @@ function CompanyCard({ name, img_url }) {
 			<CompanyModal
 				isOpen={isOpen}
 				onClose={onClose}
-				onOpen={onOpen}
 				title={"Edit Company"}
+				companyName={name}
+				companyDes={"Company Description "}
 			/>
 		</div>
 	);
