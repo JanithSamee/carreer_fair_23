@@ -16,7 +16,7 @@ function AddCompany() {
 				isOpen={isOpen}
 				onClose={onClose}
 				title={"Add Company"}
-				companyDes={"Company Description "}
+				companyDes={"Add Description "}
 			/>
 		</div>
 	);
