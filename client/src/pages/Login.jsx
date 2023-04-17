@@ -21,6 +21,7 @@ function Login() {
     const toast = useToast();
     const [formInputs, setformInputs] = useState({ email: "", password: "" });
     const [formError, setformError] = useState({ error: false, message: "" });
+    const [_loading, setLoading] = useState(false);
 
     async function handleSubmit() {
         if (!formInputs.email || !formInputs.password) {
@@ -30,7 +31,11 @@ function Login() {
             });
         } else {
             try {
+                setLoading(true);
                 await signIn(formInputs.email, formInputs.password);
+                setformError({ error: false, message: "" });
+
+                setLoading(false);
             } catch (error) {
                 toast({
                     title: "An error occurred.",
@@ -108,7 +113,13 @@ function Login() {
                         <FormErrorMessage>{formError.message}</FormErrorMessage>
                     )}
                 </FormControl>
-                <Button colorScheme="blue" width="100%" onClick={handleSubmit}>
+                <Button
+                    colorScheme="blue"
+                    width="100%"
+                    onClick={handleSubmit}
+                    isLoading={_loading}
+                    loadingText={"Loading"}
+                >
                     Login
                 </Button>
             </Box>

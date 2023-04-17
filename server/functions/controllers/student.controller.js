@@ -47,9 +47,8 @@ async function signUp(req, res) {
                 res.send({ error: false, data: token });
             })
             .catch(async (error) => {
-                console.log(error);
                 await auth.deleteUser(indexNumber);
-                res.status(500).send({ error: true, data: formatError(error) });
+                res.status(400).send({ error: true, data: formatError(error) });
             });
     } catch (error) {
         res.status(500).send({ error: true, data: formatError(error) });

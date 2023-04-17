@@ -19,8 +19,7 @@ import useAuth from "../../utils/providers/AuthProvider";
 
 function StudentDashboard() {
     const avatarSize = useBreakpointValue({ base: "sm", md: "md" });
-    const { logout } = useAuth();
-
+    const { logout, user } = useAuth();
     return (
         <Flex>
             {/* Left side */}
@@ -37,15 +36,15 @@ function StudentDashboard() {
             >
                 <Avatar
                     size="xl"
-                    name="John Doe"
+                    name={(user && user.displayName) || "-"}
                     src="https://bit.ly/broken-link"
                     my={4}
                 />
                 <Text fontSize="lg" fontWeight="bold" mb={2}>
-                    John Doe
+                    {(user && user.displayName) || "-"}
                 </Text>
                 <Text fontSize="sm" color="gray.600" mb={4}>
-                    johndoe@example.com
+                    {(user && user.email) || "-"}
                 </Text>
                 <FormControl
                     display={"flex"}
@@ -53,7 +52,12 @@ function StudentDashboard() {
                     flexDirection={"column"}
                 >
                     <FormLabel>Index Number</FormLabel>
-                    <Input type="text" placeholder="ABC123" />
+                    <Input
+                        type="text"
+                        placeholder="18XXXXX"
+                        defaultValue={(user && user.uid) || "-"}
+                        readOnly
+                    />
                 </FormControl>
 
                 <Button colorScheme="blue" mt={8}>

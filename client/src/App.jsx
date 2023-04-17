@@ -14,9 +14,8 @@ function App() {
             <AuthProvider>
                 <Routes>
                     <Route path="/" Component={Login} />
-                    <Route path="/SignUp" Component={SignUp} />
-                    <Route path="/Company" Component={Company} />
-                    <Route path="/Admin" Component={Admin} />
+                    <Route path="/signup" Component={SignUp} />
+                    <Route path="/company" Component={Company} />
                     <Route path="/student">
                         <Route
                             path="dashboard"
@@ -26,6 +25,10 @@ function App() {
                                 </PrivateStudentRoute>
                             }
                         />
+                    </Route>
+                    <Route path="/admin">
+                        {/* TODO: add private routes */}
+                        <Route path="dashboard" element={<Admin></Admin>} />
                     </Route>
                     <Route path="*" Component={NotFound} />
                     <Route path="/unauthorized" Component={Unauthorized} />

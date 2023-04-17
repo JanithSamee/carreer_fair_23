@@ -22,6 +22,8 @@ export function AuthProvider({ children }) {
 
             if (_user.role === "student") {
                 navigate("/student/dashboard");
+            } else if (_user.role === "admin") {
+                navigate("/admin/dashboard");
             } else {
                 navigate("/tbe");
             }
