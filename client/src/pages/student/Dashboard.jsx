@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Avatar,
     Box,
@@ -13,13 +13,31 @@ import {
     FormControl,
     Input,
     FormLabel,
+    useDisclosure,
 } from "@chakra-ui/react";
 import { MdAccessTime, MdPerson } from "react-icons/md";
 import useAuth from "../../utils/providers/AuthProvider";
+import StudentProfileModal from "../../components/student/StudentProfileModal";
+import { getStudent } from "../../utils/api/student.api";
 
 function StudentDashboard() {
     const avatarSize = useBreakpointValue({ base: "sm", md: "md" });
+    const [userData, setuserData] = useState({});
     const { logout, user } = useAuth();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    useEffect(() => {
+        async function getData() {
+            const _res = await getStudent();
+            if (_res.error) {
+                //TODO:add Toast
+            } else {
+                setuserData(_res.data);
+            }
+        }
+        if (user && user.uid) {
+            getData();
+        }
+    }, []);
     return (
         <Flex>
             {/* Left side */}
@@ -37,7 +55,7 @@ function StudentDashboard() {
                 <Avatar
                     size="xl"
                     name={(user && user.displayName) || "-"}
-                    src="https://bit.ly/broken-link"
+                    src={(user && user.photoURL) || ""}
                     my={4}
                 />
                 <Text fontSize="lg" fontWeight="bold" mb={2}>
@@ -46,6 +64,14 @@ function StudentDashboard() {
                 <Text fontSize="sm" color="gray.600" mb={4}>
                     {(user && user.email) || "-"}
                 </Text>
+                {/* <Button colorScheme="facebook" mb={1} onClick={onOpen}>
+                    Edit
+                </Button> */}
+                <StudentProfileModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    studentData={userData}
+                ></StudentProfileModal>
                 <FormControl
                     display={"flex"}
                     alignItems={"center"}
@@ -60,8 +86,8 @@ function StudentDashboard() {
                     />
                 </FormControl>
 
-                <Button colorScheme="blue" mt={8}>
-                    Change Password
+                <Button colorScheme="blue" mt={8} onClick={onOpen}>
+                    Change Profile
                 </Button>
                 <Button colorScheme="green" mt={4}>
                     Add Preference

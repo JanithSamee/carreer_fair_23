@@ -12,6 +12,7 @@ export default function useAuth() {
 export function AuthProvider({ children }) {
     const [user, setuser] = useState({});
     const [loading, setloading] = useState(false);
+    const [initialLoad, setinitialLoad] = useState(true);
     const navigate = useNavigate();
     async function signIn(email, password) {
         setloading(true);
@@ -37,16 +38,19 @@ export function AuthProvider({ children }) {
         setloading(true);
         await auth.signOut();
         setloading(false);
+        sessionStorage.removeItem("token");
         navigate("/");
     }
 
     useEffect(() => {
-        auth.onAuthStateChanged((_user) => {
+        setinitialLoad(false);
+
+        return auth.onAuthStateChanged((_user) => {
             if (_user) {
                 const currentDate = new Date();
 
                 const _fUser = formatUserFromAuth(_user);
-
+                sessionStorage.setItem("token", _fUser.token);
                 if (_fUser.tokenExp < currentDate.getTime()) {
                     return setuser({});
                 }
@@ -58,7 +62,9 @@ export function AuthProvider({ children }) {
     }, []);
 
     return (
-        <authContext.Provider value={{ user, signIn, loading, logout }}>
+        <authContext.Provider
+            value={{ user, signIn, loading, logout, setuser }}
+        >
             {children}
         </authContext.Provider>
     );

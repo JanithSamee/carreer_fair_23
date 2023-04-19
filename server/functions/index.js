@@ -14,7 +14,7 @@ const app = express();
 app.use(cors({ origin: NODE_ENV === "dev" ? "*" : FRONT_END_URL }));
 
 app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/v1/", router);
 

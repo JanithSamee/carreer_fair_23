@@ -46,7 +46,6 @@ studentRouter.post(
 );
 studentRouter.post(
     "/update-profile-picture",
-    upload.single("image"),
     autherenticateStudent,
     updateProfilePicture
 );

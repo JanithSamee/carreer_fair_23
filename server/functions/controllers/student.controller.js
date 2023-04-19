@@ -211,28 +211,34 @@ async function getUser(req, res) {
 }
 
 async function updateProfilePicture(req, res) {
-    const _file = req.file;
+    // const _file = req.file;
     const indexNumber = req.user.uid; // TODO: edit with middleware
-    console.log(_file);
+    // console.log(_file);
+    const { profilePhoto } = req.body;
+    console.log(profilePhoto);
     try {
-        if (_file) {
-            const compressed = await resizeFile(_file.buffer);
+        if (profilePhoto) {
+            // const compressed = await resizeFile(_file.buffer);
 
-            const result = await uploadFileToStorage(
-                compressed,
-                "student/profile-pictures/" + indexNumber + ".jpeg"
-            );
+            // const result = await uploadFileToStorage(
+            //     compressed,
+            //     "student/profile-pictures/" + indexNumber + ".jpeg"
+            // );
 
+            await auth.updateUser(indexNumber, { photoURL: profilePhoto });
             await Student.updateById(indexNumber, {
-                profilePhoto: result.publicUrl(),
+                profilePhoto: profilePhoto,
             });
 
-            return res.status(404).send({
+            return res.status(200).send({
                 error: false,
                 message: "File uploaded successfully",
             });
+        } else {
+            return res
+                .status(404)
+                .send({ error: true, message: "File Not Found" });
         }
-        res.status(404).send({ error: true, message: "File Not Found" });
     } catch (error) {
         console.error(error);
         res.status(404).send({ error: true, message: "Something went wrong" });
