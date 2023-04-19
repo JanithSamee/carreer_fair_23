@@ -14,6 +14,7 @@ import {
 import { backgroundImage, esocLogo } from "../assets/exportAssets";
 import { useState } from "react";
 import useAuth from "../utils/providers/AuthProvider";
+import ForgotPasswordModal from "../components/common/ForgotPasswordModal";
 
 function Login() {
     const { signIn } = useAuth();
@@ -122,6 +123,7 @@ function Login() {
                 >
                     Login
                 </Button>
+                <ForgotPasswordModal></ForgotPasswordModal>
             </Box>
         </Box>
     );

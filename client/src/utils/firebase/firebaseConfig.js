@@ -3,6 +3,7 @@ import {
     getAuth,
     signInWithEmailAndPassword,
     sendEmailVerification,
+    sendPasswordResetEmail,
 } from "firebase/auth";
 import { getStorage, ref } from "firebase/storage";
 
@@ -18,4 +19,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const storage = getStorage();
-export { auth, signInWithEmailAndPassword, storage, sendEmailVerification };
+export {
+    auth,
+    signInWithEmailAndPassword,
+    storage,
+    sendEmailVerification,
+    sendPasswordResetEmail,
+};

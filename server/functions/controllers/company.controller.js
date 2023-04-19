@@ -66,7 +66,8 @@ async function updateCompany(req, res) {
             profilePhoto,
         } = req.body;
 
-        maximumInterviews = maximumInterviews || "";
+        console.log(maximumInterviews);
+        maximumInterviews = maximumInterviews || 0;
         startTime = startTime || "";
         endTime = endTime || "";
         profilePhoto = profilePhoto || "";
