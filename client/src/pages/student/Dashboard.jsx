@@ -19,6 +19,7 @@ import { MdAccessTime, MdPerson } from "react-icons/md";
 import useAuth from "../../utils/providers/AuthProvider";
 import StudentProfileModal from "../../components/student/StudentProfileModal";
 import { getStudent } from "../../utils/api/student.api";
+import PreferenceSelectorModal from "../../components/student/PreferenceSelectorModal";
 
 function StudentDashboard() {
     const isMobile = useBreakpointValue({ base: true, md: false });
@@ -108,9 +109,7 @@ function StudentDashboard() {
                     >
                         Change Profile
                     </Button>
-                    <Button colorScheme="green" mt={4} w={"100%"}>
-                        Add Preference
-                    </Button>
+                    <PreferenceSelectorModal></PreferenceSelectorModal>
                     <Button
                         w={"100%"}
                         colorScheme="orange"
