@@ -8,9 +8,12 @@ import {
 	Input,
 } from "@chakra-ui/react";
 import CompanyModal from "./CompanyModal";
+import { useState } from "react";
 
 function CompanyCard({ name, img_url }) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [vacancies, setVacancies] = useState(0);
+	//console.log(vacancies);
 
 	return (
 		<div>
@@ -30,6 +33,7 @@ function CompanyCard({ name, img_url }) {
 				title={"Edit Company"}
 				companyName={name}
 				companyDes={"Company Description "}
+				setVacancies={setVacancies}
 			/>
 		</div>
 	);
