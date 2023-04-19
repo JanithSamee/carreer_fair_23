@@ -1,5 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { auth, signInWithEmailAndPassword } from "../firebase/firebaseConfig";
+import {
+    auth,
+    sendEmailVerification,
+    signInWithEmailAndPassword,
+} from "../firebase/firebaseConfig";
 import { formatUserFromAuth } from "../helpers/formatter";
 import { useNavigate } from "react-router-dom";
 
@@ -20,6 +24,11 @@ export function AuthProvider({ children }) {
         if (_res) {
             const _user = formatUserFromAuth(_res.user);
             setuser(_user);
+
+            if (!_user.emailVerified) {
+                await sendEmailVerification(auth.currentUser);
+                return navigate("/verify-email");
+            }
 
             if (_user.role === "student") {
                 navigate("/student/dashboard");
@@ -50,6 +59,9 @@ export function AuthProvider({ children }) {
                 const currentDate = new Date();
 
                 const _fUser = formatUserFromAuth(_user);
+                if (!_fUser.emailVerified) {
+                    return navigate("/verify-email");
+                }
                 sessionStorage.setItem("token", _fUser.token);
                 if (_fUser.tokenExp < currentDate.getTime()) {
                     return setuser({});

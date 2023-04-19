@@ -8,6 +8,7 @@ import StudentDashboard from "./pages/student/Dashboard";
 import NotFound from "./pages/NotFound";
 import Unauthorized from "./components/common/Unauthorized";
 import PrivateStudentRoute from "./utils/providers/StudentPrivateRoutes";
+import VerfyTheEmail from "./pages/VerfyTheEmail";
 function App() {
     return (
         <Router>
@@ -32,6 +33,7 @@ function App() {
                     </Route>
                     <Route path="*" Component={NotFound} />
                     <Route path="/unauthorized" Component={Unauthorized} />
+                    <Route path="/verify-email" Component={VerfyTheEmail} />
                 </Routes>
             </AuthProvider>
         </Router>
