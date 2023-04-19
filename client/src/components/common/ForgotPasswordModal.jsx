@@ -35,6 +35,8 @@ export default function ForgotPasswordModal() {
         try {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
+                setloading(false);
+
                 return setformError("Please provide valid email!");
             }
             // Send password reset email to the user's email

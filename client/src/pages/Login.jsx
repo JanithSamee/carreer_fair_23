@@ -15,6 +15,7 @@ import { backgroundImage, esocLogo } from "../assets/exportAssets";
 import { useState } from "react";
 import useAuth from "../utils/providers/AuthProvider";
 import ForgotPasswordModal from "../components/common/ForgotPasswordModal";
+import { Link } from "react-router-dom";
 
 function Login() {
     const { signIn } = useAuth();
@@ -123,7 +124,18 @@ function Login() {
                 >
                     Login
                 </Button>
+
                 <ForgotPasswordModal></ForgotPasswordModal>
+                <Box textAlign="center" mt={4}>
+                    <Button
+                        color="blue.500"
+                        variant="link"
+                        as={Link}
+                        to={"/signup"}
+                    >
+                        Don't have an account?
+                    </Button>
+                </Box>
             </Box>
         </Box>
     );
