@@ -6,9 +6,10 @@ const globalCollection = db.collection("global");
 // Define the User model
 class Global {
     constructor(data) {
-        this.registrationDeadLine =
-            data.registrationDeadLine || new Date("2023.04.01");
-        this.eventDate = data.eventDate || new Date("2023.04.01");
+        this.registrationDeadLine = new Date(
+            data.registrationDeadLine || "2023.04.01"
+        );
+        this.eventDate = new Date(data.eventDate || "2023.04.01");
     }
 
     // Save the user data to Firestore
@@ -16,8 +17,8 @@ class Global {
         try {
             const userRef = globalCollection.doc("v1");
             await userRef.set({
-                registrationDeadLine: this.registrationDeadLine,
-                eventDate: this.eventDate,
+                registrationDeadLine: new Date(this.registrationDeadLine),
+                eventDate: new Date(this.eventDate),
             });
             return this;
         } catch (error) {
@@ -40,7 +41,14 @@ class Global {
             if (globalDoc.exists) {
                 const globalData = globalDoc.data();
 
-                return new Global(globalData);
+                const registrationDeadLine = new Date(
+                    globalData.registrationDeadLine._seconds * 1000
+                );
+                const eventDate = new Date(
+                    globalData.eventDate._seconds * 1000
+                );
+
+                return new Global({ registrationDeadLine, eventDate });
             }
             return null;
         } catch (error) {

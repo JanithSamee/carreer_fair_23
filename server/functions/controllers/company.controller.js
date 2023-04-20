@@ -27,7 +27,7 @@ async function addCompany(req, res) {
                 .send({ error: true, data: "Company Already exsists!" });
         }
 
-        const companyId = email.split("@")[0] + "-" + name;
+        const companyId = email.split("@")[0] + "-" + name.split(" ").join("-");
 
         const company = new Company({
             companyId,

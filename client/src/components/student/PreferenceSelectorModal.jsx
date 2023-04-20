@@ -19,22 +19,32 @@ import {
     Stack,
     useDisclosure,
     Text,
+    Badge,
+    IconButton,
+    AvatarBadge,
 } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import { getAllCompanies } from "../../utils/api/company.api";
+import { updateStudentpreferences } from "../../utils/api/student.api";
 
-export default function PreferenceSelectorModal() {
+export default function PreferenceSelectorModal({ userData, setUserData }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const [selectedCompanies, setSelectedCompanies] = useState([]);
     const [companies, setcompanies] = useState([]);
     const [loadingCompanies, setloadingCompanies] = useState(false);
+    const [loadingSubmit, setloadingSubmit] = useState(false);
 
     // function to add a company to the list of selected companies
     const addCompany = (companyId) => {
         // check if the company is already in the list of selected companies
-        if (!selectedCompanies.find((c) => c.companyId === companyId)) {
-            const _company = companies.find((c) => c.companyId === companyId);
-            setSelectedCompanies([...selectedCompanies, _company]);
+        if (companyId) {
+            if (!selectedCompanies.find((c) => c.companyId === companyId)) {
+                const _company = companies.find(
+                    (c) => c.companyId === companyId
+                );
+                setSelectedCompanies([...selectedCompanies, _company]);
+            }
         }
     };
 
@@ -46,10 +56,24 @@ export default function PreferenceSelectorModal() {
     };
 
     // function to handle the "Save" button click
-    const handleSaveClick = () => {
+    const handleSaveClick = async () => {
         // save the selected companies to the database or do other necessary actions
-        console.log(selectedCompanies);
-        // onClose();
+        // console.log(selectedCompanies);
+        const formData = selectedCompanies.map((element) => element.companyId);
+        const newPrefList = selectedCompanies.map((element) => ({
+            name: element.companyId,
+        }));
+        setloadingSubmit(true);
+        const _res = await updateStudentpreferences({ preferences: formData });
+        setloadingSubmit(false);
+        if (_res.error) {
+            console.log(_res.data);
+            return; //TODO:add toast
+        }
+        // TODO: add success toast
+        // console.log(newPrefList);
+        setUserData({ ...userData, preferenceList: newPrefList });
+        onClose();
     };
 
     useEffect(() => {
@@ -61,12 +85,10 @@ export default function PreferenceSelectorModal() {
                 console.log(error);
                 return; //TODO:add toast
             }
-            console.log(_res.data);
             Array.isArray(_res.data) && setcompanies(_res.data);
         }
         getData();
     }, []);
-
     return (
         <>
             <Button colorScheme="green" mt={4} w={"100%"} onClick={onOpen}>
@@ -78,6 +100,40 @@ export default function PreferenceSelectorModal() {
                     <ModalHeader>Select companies</ModalHeader>
                     <ModalBody>
                         <Stack spacing={4}>
+                            <Box>
+                                <Text color={"GrayText"}>
+                                    Current Selection
+                                </Text>
+                                {userData &&
+                                    Array.isArray(userData.preferenceList) &&
+                                    userData.preferenceList.map(
+                                        (element, index) => (
+                                            <Tag
+                                                key={
+                                                    (element && element.name) ||
+                                                    index
+                                                }
+                                                size="lg"
+                                                variant="outline"
+                                                m={1}
+                                                p={2}
+                                                // boxShadow={"sm"}
+                                            >
+                                                <Text>{index + 1 + ". "}</Text>
+                                                <Avatar
+                                                    size="sm"
+                                                    name={
+                                                        element && element.name
+                                                    }
+                                                    m={2}
+                                                />
+                                                <TagLabel>
+                                                    {element && element.name}
+                                                </TagLabel>
+                                            </Tag>
+                                        )
+                                    )}
+                            </Box>
                             {loadingCompanies && (
                                 <Text>Loading Companies...</Text>
                             )}
@@ -85,11 +141,12 @@ export default function PreferenceSelectorModal() {
                                 id="company"
                                 isDisabled={loadingCompanies}
                             >
-                                <FormLabel>Select a company</FormLabel>
+                                <FormLabel>
+                                    Select your new Preferences{" "}
+                                </FormLabel>
                                 <Select
                                     placeholder="Select a company"
                                     onChange={(e) => {
-                                        console.log(e.target.value);
                                         addCompany(e.target.value);
                                     }}
                                 >
@@ -106,18 +163,28 @@ export default function PreferenceSelectorModal() {
                             <Box>
                                 {selectedCompanies.map((company, index) => (
                                     <Tag
-                                        key={company.companyId || index}
+                                        key={
+                                            (company && company.companyId) ||
+                                            index
+                                        }
                                         size="lg"
-                                        variant="solid"
-                                        colorScheme="teal"
+                                        variant="outline"
                                         m={1}
                                         p={2}
+                                        // boxShadow={"sm"}
                                     >
                                         <Text>{index + 1 + ". "}</Text>
-                                        <Avatar size="sm" name={company.name} />
-                                        <TagLabel>{company.name}</TagLabel>
+                                        <Avatar
+                                            size="sm"
+                                            name={company && company.name}
+                                            m={2}
+                                        />
+                                        <TagLabel>
+                                            {company && company.name}
+                                        </TagLabel>
                                         <TagCloseButton
                                             onClick={() =>
+                                                company &&
                                                 removeCompany(company.companyId)
                                             }
                                         />
@@ -127,7 +194,11 @@ export default function PreferenceSelectorModal() {
                         </Stack>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="green" onClick={handleSaveClick}>
+                        <Button
+                            colorScheme="green"
+                            onClick={handleSaveClick}
+                            isLoading={loadingSubmit}
+                        >
                             Save
                         </Button>
                     </ModalFooter>

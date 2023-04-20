@@ -6,6 +6,7 @@ async function setParams(req, res) {
         const { registrationDeadLine, eventDate } = req.body;
         const globalData = new Global({ registrationDeadLine, eventDate });
 
+        console.log(globalData);
         await globalData.save();
         res.status(200).send({
             error: false,

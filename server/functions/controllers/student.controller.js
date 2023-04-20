@@ -1,4 +1,5 @@
 import { auth } from "../db/exporter.js";
+import Global from "../models/global.model.js";
 import Student from "../models/student.model.js";
 import { generateToken } from "../utils/authHelper.js";
 import { resizeFile, uploadFileToStorage } from "../utils/fileHandling.js";
@@ -102,7 +103,8 @@ async function updatePreference(req, res) {
     try {
         const { preferences } = req.body;
         const indexNumber = req.user.uid;
-        const registrationDdl = new Date("2023-04-10T12:00:00Z"); //TODO: Get from global data
+        const globalObject = await Global.find();
+
         const currentDate = new Date();
         if (!preferences || !Array.isArray(preferences)) {
             return res.status(400).send({
@@ -110,7 +112,9 @@ async function updatePreference(req, res) {
                 data: "Preference List is empty or invalid.",
             });
         }
-        if (registrationDdl.getTime() <= currentDate.getTime()) {
+        if (
+            globalObject.registrationDeadLine.getTime() <= currentDate.getTime()
+        ) {
             return res.status(400).send({
                 error: true,
                 data: "Preference List can not be updated after the deadline",
@@ -212,7 +216,7 @@ async function getUser(req, res) {
 
 async function updateProfilePicture(req, res) {
     // const _file = req.file;
-    const indexNumber = req.user.uid; // TODO: edit with middleware
+    const indexNumber = req.user.uid;
     // console.log(_file);
     const { profilePhoto } = req.body;
     console.log(profilePhoto);
@@ -246,7 +250,7 @@ async function updateProfilePicture(req, res) {
 }
 async function uploadCV(req, res) {
     const _file = req.file;
-    const indexNumber = req.user.uid; // TODO: edit with middleware
+    const indexNumber = req.user.uid;
     try {
         if (_file) {
             // const compressed = await resizeFile(_file.buffer);

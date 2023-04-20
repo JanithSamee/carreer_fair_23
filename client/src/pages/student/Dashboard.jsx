@@ -109,7 +109,10 @@ function StudentDashboard() {
                     >
                         Change Profile
                     </Button>
-                    <PreferenceSelectorModal></PreferenceSelectorModal>
+                    <PreferenceSelectorModal
+                        userData={userData}
+                        setUserData={setuserData}
+                    ></PreferenceSelectorModal>
                     <Button
                         w={"100%"}
                         colorScheme="orange"
