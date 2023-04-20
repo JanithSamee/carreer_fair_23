@@ -55,6 +55,21 @@ export async function updateStudentProfilePicture(imageUrl) {
         );
     }
 }
+export async function updateStudentCV(cvURL) {
+    try {
+        const _res = await base_api.post("/student/update-cv", {
+            cvURL: cvURL,
+        });
+        return _res.data;
+    } catch (error) {
+        return (
+            (error.response && error.response.data) || {
+                error: true,
+                data: error.message || "Uknown Error!",
+            }
+        );
+    }
+}
 export async function updateStudentpreferences(formData) {
     try {
         const _res = await base_api.post(

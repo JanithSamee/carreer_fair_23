@@ -249,22 +249,16 @@ async function updateProfilePicture(req, res) {
     }
 }
 async function uploadCV(req, res) {
-    const _file = req.file;
     const indexNumber = req.user.uid;
+    const { cvURL } = req.body;
+
     try {
-        if (_file) {
-            // const compressed = await resizeFile(_file.buffer);
-
-            const result = await uploadFileToStorage(
-                _file.buffer,
-                "student/cv/" + indexNumber + ".pdf"
-            );
-
+        if (cvURL) {
             await Student.updateById(indexNumber, {
-                profilePhoto: result.publicUrl(),
+                cvURL: cvURL,
             });
 
-            return res.status(404).send({
+            return res.status(200).send({
                 error: false,
                 message: "File uploaded successfully",
             });

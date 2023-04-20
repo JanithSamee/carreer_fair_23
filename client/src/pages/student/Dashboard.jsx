@@ -14,12 +14,14 @@ import {
     Input,
     FormLabel,
     useDisclosure,
+    SimpleGrid,
 } from "@chakra-ui/react";
 import { MdAccessTime, MdPerson } from "react-icons/md";
 import useAuth from "../../utils/providers/AuthProvider";
 import StudentProfileModal from "../../components/student/StudentProfileModal";
 import { getStudent } from "../../utils/api/student.api";
 import PreferenceSelectorModal from "../../components/student/PreferenceSelectorModal";
+import UploadCVModal from "../../components/student/UploadCVModal";
 
 function StudentDashboard() {
     const isMobile = useBreakpointValue({ base: true, md: false });
@@ -48,7 +50,9 @@ function StudentDashboard() {
                 bg="gray.200"
                 p={4}
                 height={isMobile ? "auto" : "100vh"}
-                flexDirection={isMobile ? "row" : "column"}
+                flexDirection={
+                    isMobile && avatarSize === "xl" ? "row" : "column"
+                }
                 backgroundColor="gray.100"
                 display="flex"
                 justifyContent="center"
@@ -94,21 +98,24 @@ function StudentDashboard() {
                         readOnly
                     />
                 </FormControl>
-                <Box
-                    ml={2}
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    flexDir={"column"}
+                <SimpleGrid
+                    columns={[2, 1, 1]}
+                    spacing="4"
+                    mt={2}
+                    p={5}
+                    w="100%"
+                    alignItems={"baseline"}
                 >
                     <Button
                         colorScheme="blue"
                         mt={8}
+                        mr={2}
                         onClick={onOpen}
                         w={"100%"}
                     >
                         Change Profile
                     </Button>
+                    <UploadCVModal />
                     <PreferenceSelectorModal
                         userData={userData}
                         setUserData={setuserData}
@@ -123,7 +130,7 @@ function StudentDashboard() {
                     >
                         Logout
                     </Button>
-                </Box>
+                </SimpleGrid>
             </Box>
 
             {/* Right side */}

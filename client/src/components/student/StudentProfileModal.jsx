@@ -140,38 +140,7 @@ export default function StudentProfileModal({ isOpen, onClose, studentData }) {
                                     onChange={handleInputChange}
                                 />
                             </FormControl>
-                            {/* <hr></hr>
-                            <FormControl
-                                id="password"
-                                isRequired
-                                mb={4}
-                                // isInvalid={formError.error}
-                            >
-                                <FormLabel>Password</FormLabel>
-                                <Input
-                                    type="password"
-                                    name="password"
-                                    onChange={handleInputChange}
-                                />
-                            </FormControl>
-                            <FormControl
-                                id="confirmPassword"
-                                isRequired
-                                mb={4}
-                                // isInvalid={formError.error}
-                            >
-                                <FormLabel>Confirm Password</FormLabel>
-                                <Input
-                                    type="password"
-                                    name="confirmPassword"
-                                    onChange={handleInputChange}
-                                />
-                                {/* {formError.error && (
-                                    <FormErrorMessage>
-                                        {formError.message}
-                                    </FormErrorMessage>
-                                )} */}
-                            {/* </FormControl> */}
+
                             <Button
                                 type="submit"
                                 colorScheme="blue"

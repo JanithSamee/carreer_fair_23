@@ -49,11 +49,6 @@ studentRouter.post(
     autherenticateStudent,
     updateProfilePicture
 );
-studentRouter.post(
-    "/update-cv",
-    upload.single("cv"),
-    autherenticateStudent,
-    uploadCV
-);
+studentRouter.post("/update-cv", autherenticateStudent, uploadCV);
 
 export { studentRouter };
