@@ -4,6 +4,7 @@ import {
     signInWithEmailAndPassword,
     sendEmailVerification,
     sendPasswordResetEmail,
+    updatePassword,
 } from "firebase/auth";
 import { getStorage, ref } from "firebase/storage";
 
@@ -25,4 +26,5 @@ export {
     storage,
     sendEmailVerification,
     sendPasswordResetEmail,
+    updatePassword,
 };

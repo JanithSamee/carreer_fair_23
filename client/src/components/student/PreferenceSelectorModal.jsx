@@ -82,7 +82,6 @@ export default function PreferenceSelectorModal({ userData, setUserData }) {
             const _res = await getAllCompanies();
             setloadingCompanies(false);
             if (_res.error) {
-                console.log(error);
                 return; //TODO:add toast
             }
             Array.isArray(_res.data) && setcompanies(_res.data);

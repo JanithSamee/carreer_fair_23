@@ -12,7 +12,7 @@ import {
     useToast,
     useDisclosure,
 } from "@chakra-ui/react";
-import { backgroundImage, esocLogo } from "../assets/exportAssets";
+import { backgroundSignUp, esocLogo } from "../assets/exportAssets";
 import { useState } from "react";
 import useAuth from "../utils/providers/AuthProvider";
 import { signUpStudent } from "../utils/api/student.api";
@@ -94,7 +94,7 @@ function SignUp() {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            bgImage={`url(${backgroundImage})`}
+            bgImage={`url(${backgroundSignUp})`}
             bgSize="cover"
             h="100vh"
             w="100%"

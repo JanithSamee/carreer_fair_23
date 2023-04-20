@@ -39,6 +39,8 @@ function Login() {
 
                 setLoading(false);
             } catch (error) {
+                setLoading(false);
+
                 toast({
                     title: "An error occurred.",
                     description: error.message,
