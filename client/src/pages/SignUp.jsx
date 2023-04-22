@@ -10,14 +10,17 @@ import {
     FormHelperText,
     Toast,
     useToast,
+    useDisclosure,
 } from "@chakra-ui/react";
-import { backgroundImage, esocLogo } from "../assets/exportAssets";
+import { backgroundSignUp, esocLogo } from "../assets/exportAssets";
 import { useState } from "react";
 import useAuth from "../utils/providers/AuthProvider";
 import { signUpStudent } from "../utils/api/student.api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import SignUpConfirmModal from "../components/student/SignUpConfirmModal";
 
 function SignUp() {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const navigator = useNavigate();
     const { signIn } = useAuth();
     const isMobile = useBreakpointValue({ base: true, sm: false });
@@ -32,7 +35,7 @@ function SignUp() {
     const [formError, setformError] = useState({ error: false, message: "" });
     const [_loading, setLoading] = useState(false);
 
-    async function handleSubmit() {
+    function handleInputs() {
         if (
             !formInputs.email ||
             !formInputs.password ||
@@ -50,33 +53,38 @@ function SignUp() {
                 message: "Password and Confirm Password must match!",
             });
         } else {
-            try {
-                setLoading(true);
-                const _res = await signUpStudent(formInputs);
+            onOpen();
+        }
+        return setLoading(false);
+    }
 
-                if (_res.error) {
-                    toast({
-                        title: "An error occurred.",
-                        description: _res.data,
-                        status: "error",
-                        duration: 9000,
-                        isClosable: true,
-                    });
-                } else {
-                    navigator("/");
-                }
+    async function handleSubmit() {
+        try {
+            setLoading(true);
+            const _res = await signUpStudent(formInputs);
 
-                setLoading(false);
-                setformError({ error: false, message: "" });
-            } catch (error) {
+            if (_res.error) {
                 toast({
                     title: "An error occurred.",
-                    description: error.message,
+                    description: _res.data,
                     status: "error",
                     duration: 9000,
                     isClosable: true,
                 });
+            } else {
+                navigator("/");
             }
+
+            setLoading(false);
+            setformError({ error: false, message: "" });
+        } catch (error) {
+            toast({
+                title: "An error occurred.",
+                description: error.message,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+            });
         }
         return setLoading(false);
     }
@@ -86,7 +94,7 @@ function SignUp() {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            bgImage={`url(${backgroundImage})`}
+            bgImage={`url(${backgroundSignUp})`}
             bgSize="cover"
             h="100vh"
             w="100%"
@@ -199,15 +207,35 @@ function SignUp() {
                     )}
                 </FormControl>
 
-                <Button
+                {/* <Button
                     colorScheme="blue"
                     width="100%"
                     onClick={handleSubmit}
                     isLoading={_loading}
                     loadingText={"Loading"}
                 >
-                    Login
+                    Sign Up
+                </Button> */}
+                <SignUpConfirmModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    onConfirm={handleSubmit}
+                    data={formInputs}
+                ></SignUpConfirmModal>
+                <Button
+                    colorScheme="blue"
+                    width="100%"
+                    onClick={handleInputs}
+                    isLoading={_loading}
+                    loadingText={"Loading"}
+                >
+                    Sign Up
                 </Button>
+                <Box textAlign="center" mt={4}>
+                    <Button color="blue.500" variant="link" as={Link} to={"/"}>
+                        Already have account?
+                    </Button>
+                </Box>
             </Box>
         </Box>
     );

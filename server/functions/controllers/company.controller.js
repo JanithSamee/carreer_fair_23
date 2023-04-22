@@ -27,7 +27,7 @@ async function addCompany(req, res) {
                 .send({ error: true, data: "Company Already exsists!" });
         }
 
-        const companyId = email.split("@")[0] + "-" + name;
+        const companyId = email.split("@")[0] + "-" + name.split(" ").join("-");
 
         const company = new Company({
             companyId,
@@ -66,7 +66,8 @@ async function updateCompany(req, res) {
             profilePhoto,
         } = req.body;
 
-        maximumInterviews = maximumInterviews || "";
+        console.log(maximumInterviews);
+        maximumInterviews = maximumInterviews || 0;
         startTime = startTime || "";
         endTime = endTime || "";
         profilePhoto = profilePhoto || "";

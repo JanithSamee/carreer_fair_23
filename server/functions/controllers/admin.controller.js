@@ -8,49 +8,55 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
 async function signUp(req, res) {
-    const { email, password } = req.body;
+    const { email, password, create_token } = req.body;
 
     try {
-        if (!email || !password) {
-            return res.status(400).send({
-                error: true,
-                data: "Invalid Inputs or Insufficient Inputs",
+        if (process.env.ENV_ADMIN_TOKEN === create_token) {
+            if (!email || !password) {
+                return res.status(400).send({
+                    error: true,
+                    data: "Invalid Inputs or Insufficient Inputs",
+                });
+            }
+
+            // Create a new user account using Firebase Admin SDK
+            const userRecord = await auth.createUser({
+                email,
+                password,
+                uid: email,
+                displayName: email.split("@")[0],
+                emailVerified: true,
             });
+
+            await auth.setCustomUserClaims(userRecord.uid, { role: "admin" });
+
+            const admin = new Admin({
+                email,
+                accessLevel: "full",
+                adminId: email,
+            });
+
+            admin
+                .save()
+                .then(async () => {
+                    // Generate a Firebase authentication token for the user using Firebase Functions SDK
+                    const token = await generateToken(userRecord.uid, "admin");
+
+                    // Return the authentication token to the client
+                    res.send({ error: false, data: token });
+                })
+                .catch(async (error) => {
+                    console.log(error);
+                    await auth.deleteUser(email);
+                    res.status(500).send({
+                        error: true,
+                        data: formatError(error),
+                    });
+                });
+        } else {
+            res.status(401).send({ error: true, data: "Unautherenticated!" });
         }
-
-        // Create a new user account using Firebase Admin SDK
-        const userRecord = await auth.createUser({
-            email,
-            password,
-            uid: email,
-            displayName: email.split("@")[0],
-        });
-
-        await auth.setCustomUserClaims(userRecord.uid, { role: "admin" });
-
-        const admin = new Admin({
-            email,
-            accessLevel: "full",
-            adminId: email,
-        });
-
-        admin
-            .save()
-            .then(async () => {
-                // Generate a Firebase authentication token for the user using Firebase Functions SDK
-                const token = await generateToken(userRecord.uid, "admin");
-
-                // Return the authentication token to the client
-                res.send({ error: false, data: token });
-            })
-            .catch(async (error) => {
-                console.log(error);
-                await auth.deleteUser(email);
-                res.status(500).send({ error: true, data: formatError(error) });
-            });
-    } catch (error) {
-        res.status(500).send({ error: true, data: formatError(error) });
-    }
+    } catch (error) {}
 }
 
 async function exportData(req, res) {

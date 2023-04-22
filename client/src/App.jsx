@@ -9,6 +9,9 @@ import NotFound from "./pages/NotFound";
 import Unauthorized from "./components/common/Unauthorized";
 import PrivateStudentRoute from "./utils/providers/StudentPrivateRoutes";
 import VerfyTheEmail from "./pages/VerfyTheEmail";
+import Navbar from "./components/common/NavBar";
+import { Box } from "@chakra-ui/react";
+import About from "./pages/About";
 function App() {
     return (
         <Router>
@@ -22,6 +25,7 @@ function App() {
                             path="dashboard"
                             element={
                                 <PrivateStudentRoute>
+                                    <Navbar></Navbar>
                                     <StudentDashboard></StudentDashboard>
                                 </PrivateStudentRoute>
                             }
@@ -34,6 +38,7 @@ function App() {
                     <Route path="*" Component={NotFound} />
                     <Route path="/unauthorized" Component={Unauthorized} />
                     <Route path="/verify-email" Component={VerfyTheEmail} />
+                    <Route path="/about" Component={About} />
                 </Routes>
             </AuthProvider>
         </Router>

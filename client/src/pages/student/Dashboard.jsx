@@ -14,14 +14,18 @@ import {
     Input,
     FormLabel,
     useDisclosure,
+    SimpleGrid,
 } from "@chakra-ui/react";
 import { MdAccessTime, MdPerson } from "react-icons/md";
 import useAuth from "../../utils/providers/AuthProvider";
 import StudentProfileModal from "../../components/student/StudentProfileModal";
 import { getStudent } from "../../utils/api/student.api";
+import PreferenceSelectorModal from "../../components/student/PreferenceSelectorModal";
+import UploadCVModal from "../../components/student/UploadCVModal";
 
 function StudentDashboard() {
-    const avatarSize = useBreakpointValue({ base: "sm", md: "md" });
+    const isMobile = useBreakpointValue({ base: true, md: false });
+    const avatarSize = useBreakpointValue({ base: "md", sm: "xl" });
     const [userData, setuserData] = useState({});
     const { logout, user } = useAuth();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,39 +43,48 @@ function StudentDashboard() {
         }
     }, []);
     return (
-        <Flex>
+        <Flex flexDir={isMobile ? "column" : "row"}>
             {/* Left side */}
             <Box
-                w="25%"
+                w={isMobile ? "100%" : "25%"}
                 bg="gray.200"
                 p={4}
-                height="100vh"
-                flexDirection={"column"}
+                height={isMobile ? "auto" : "100vh"}
+                flexDirection={
+                    isMobile && avatarSize === "xl" ? "row" : "column"
+                }
                 backgroundColor="gray.100"
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
             >
-                <Avatar
-                    size="xl"
-                    name={(user && user.displayName) || "-"}
-                    src={(user && user.photoURL) || ""}
-                    my={4}
-                />
-                <Text fontSize="lg" fontWeight="bold" mb={2}>
-                    {(user && user.displayName) || "-"}
-                </Text>
-                <Text fontSize="sm" color="gray.600" mb={4}>
-                    {(user && user.email) || "-"}
-                </Text>
-                {/* <Button colorScheme="facebook" mb={1} onClick={onOpen}>
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    flexDir={"column"}
+                >
+                    <Avatar
+                        size={avatarSize}
+                        name={(user && user.displayName) || "-"}
+                        src={(user && user.photoURL) || ""}
+                        my={4}
+                    />
+                    <Text fontSize="lg" fontWeight="bold" mb={2}>
+                        {(user && user.displayName) || "-"}
+                    </Text>
+                    <Text fontSize="sm" color="gray.600" mb={4}>
+                        {(user && user.email) || "-"}
+                    </Text>
+                    {/* <Button colorScheme="facebook" mb={1} onClick={onOpen}>
                     Edit
                 </Button> */}
-                <StudentProfileModal
-                    isOpen={isOpen}
-                    onClose={onClose}
-                    studentData={userData}
-                ></StudentProfileModal>
+                    <StudentProfileModal
+                        isOpen={isOpen}
+                        onClose={onClose}
+                        studentData={userData}
+                    ></StudentProfileModal>
+                </Box>
                 <FormControl
                     display={"flex"}
                     alignItems={"center"}
@@ -85,22 +98,39 @@ function StudentDashboard() {
                         readOnly
                     />
                 </FormControl>
-
-                <Button colorScheme="blue" mt={8} onClick={onOpen}>
-                    Change Profile
-                </Button>
-                <Button colorScheme="green" mt={4}>
-                    Add Preference
-                </Button>
-                <Button
-                    colorScheme="orange"
-                    mt={4}
-                    onClick={async () => {
-                        await logout();
-                    }}
+                <SimpleGrid
+                    columns={[2, 1, 1]}
+                    spacing="4"
+                    mt={2}
+                    p={5}
+                    w="100%"
+                    alignItems={"baseline"}
                 >
-                    Logout
-                </Button>
+                    <Button
+                        colorScheme="blue"
+                        mt={8}
+                        mr={2}
+                        onClick={onOpen}
+                        w={"100%"}
+                    >
+                        Change Profile
+                    </Button>
+                    <UploadCVModal />
+                    <PreferenceSelectorModal
+                        userData={userData}
+                        setUserData={setuserData}
+                    ></PreferenceSelectorModal>
+                    <Button
+                        w={"100%"}
+                        colorScheme="orange"
+                        mt={4}
+                        onClick={async () => {
+                            await logout();
+                        }}
+                    >
+                        Logout
+                    </Button>
+                </SimpleGrid>
             </Box>
 
             {/* Right side */}

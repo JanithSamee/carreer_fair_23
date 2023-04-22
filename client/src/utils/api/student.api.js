@@ -1,3 +1,4 @@
+import { formatError } from "../helpers/formatter";
 import base_api from "./_base.api";
 
 export async function signUpStudent(formData) {
@@ -52,5 +53,31 @@ export async function updateStudentProfilePicture(imageUrl) {
                 data: error.message || "Uknown Error!",
             }
         );
+    }
+}
+export async function updateStudentCV(cvURL) {
+    try {
+        const _res = await base_api.post("/student/update-cv", {
+            cvURL: cvURL,
+        });
+        return _res.data;
+    } catch (error) {
+        return (
+            (error.response && error.response.data) || {
+                error: true,
+                data: error.message || "Uknown Error!",
+            }
+        );
+    }
+}
+export async function updateStudentpreferences(formData) {
+    try {
+        const _res = await base_api.post(
+            "/student/update-preferences",
+            formData
+        );
+        return _res.data;
+    } catch (error) {
+        return formatError(error);
     }
 }
