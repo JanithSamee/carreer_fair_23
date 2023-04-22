@@ -1,41 +1,46 @@
-import { Box, Flex, Grid, GridItem } from "@chakra-ui/react";
-import axios from "axios";
+import { Grid, GridItem, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import CompanyCard from "./CompanyCard";
 import AddCompany from "./AddCompany";
+import { getAllCompanies } from "../utils/api/company.api";
 
 function CompanyCardsGrid() {
 	//states
 	const [data, setData] = useState([]);
+	const [data2, setData2] = useState([]);
+	const toast = useToast();
 	//APIs
 	useEffect(() => {
-		axios
-			.get("https://dog.ceo/api/breeds/image/random") //Mock API
-			.then((response) =>
-				setData([
-					{
-						student_name: "WSO2",
-						img_url: "fmf",
-					},
-					{
-						student_name: "CEB",
-						img_url: "fmf",
-					},
-				])
-			)
-			.catch((error) => console.error(error));
+		async function getCompanies() {
+			// const _res = await getAllCompanies();
+			//console.log(first)
+			if (_res.error) {
+				toast({
+					title: "An error occured !",
+					description: _res.data,
+					status: "error",
+					duration: 9000,
+					isClosable: true,
+				});
+			} else {
+				setData(_res.data);
+			}
+		}
+		getCompanies();
 	}, []);
+	//console.log(data2[1]);
 	const companyCards = data.map((company, idx) => (
 		<GridItem key={idx}>
 			<CompanyCard
-				name={company.student_name}
-				img_url={company.img_url}
+				name={company.name}
+				img_url={company.profilePhoto}
+				companyID={company.companyId}
 			></CompanyCard>
 		</GridItem>
 	));
 	return (
 		<>
-			<Grid templateColumns="repeat(8, 2fr)" gap={2} alignItems="center">
+			<Grid templateColumns="repeat(7	, 2fr)" gap={12} alignItems="center">
 				{companyCards}
 				<GridItem>
 					<AddCompany></AddCompany>
