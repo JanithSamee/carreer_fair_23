@@ -41,7 +41,7 @@ function CompanyModal({
                 <ModalCloseButton />
                 <ModalBody>
                     <Box align="center">
-                        <FormControl>
+                        {/* <FormControl>
                             <Avatar name={companyName}></Avatar>
                             <Input
                                 type="file"
@@ -53,7 +53,7 @@ function CompanyModal({
                                 ml={-50}
                                 hidden={title === "Add Company"}
                             ></Input>
-                        </FormControl>
+                        </FormControl> */}
                     </Box>
                     <FormControl
                         isRequired

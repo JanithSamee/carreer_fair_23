@@ -19,7 +19,16 @@ import {
     NumberDecrementStepper,
     NumberInput,
     Textarea,
+    AvatarBadge,
+    Center,
+    Text,
 } from "@chakra-ui/react";
+import { useState } from "react";
+import { handleFileUpload } from "../utils/firebase/firebaseUtils";
+import { useEffect } from "react";
+import { MdAdd } from "react-icons/md";
+import { updateCompanyProfilePicture } from "../utils/api/company.api";
+
 function EditCompanyModal({
     isOpen,
     onClose,
@@ -31,6 +40,46 @@ function EditCompanyModal({
     formError,
     loading,
 }) {
+    const [imageLoading, setimageLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState("");
+
+    useEffect(() => {
+        if (formInputs && formInputs.profilePhoto) {
+            setImageUrl(formInputs.profilePhoto);
+        }
+    }, []);
+
+    function handleImageUpload(e) {
+        setimageLoading(true);
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                setImageUrl(reader.result);
+                const res = await handleFileUpload(
+                    file,
+                    "company/profile-pictures/",
+                    formInputs.companyId
+                );
+                if (res.error) {
+                    //TODO: add toast
+                    setimageLoading(false);
+                } else {
+                    const __res = await updateCompanyProfilePicture({
+                        companyId: formInputs.companyId,
+                        imageUrl: res.data,
+                    });
+                    if (__res.error) {
+                        //TODO: add toast
+                        setimageLoading(false);
+                    }
+                }
+                setimageLoading(false);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -40,17 +89,27 @@ function EditCompanyModal({
                 <ModalBody>
                     <Box align="center">
                         <FormControl>
-                            <Avatar name={formInputs.name}></Avatar>
-                            <Input
-                                type="file"
-                                size="xs"
-                                zIndex={100}
-                                opacity={0}
-                                w={10}
-                                mt={2}
-                                ml={-50}
-                                hidden={title === "Add Company"}
-                            ></Input>
+                            <label>
+                                <Avatar size="xl" src={imageUrl}>
+                                    <AvatarBadge boxSize="0.9em" bg="green.500">
+                                        <MdAdd
+                                            style={{ margin: 0 }}
+                                            color="white"
+                                            size={30}
+                                        ></MdAdd>
+                                    </AvatarBadge>
+                                    <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        onChange={handleImageUpload}
+                                    />
+                                </Avatar>
+                            </label>
+                            {imageLoading && (
+                                <Center mt={2}>
+                                    <Text fontSize="xl">Uploading...</Text>
+                                </Center>
+                            )}
                         </FormControl>
                     </Box>
                     <FormControl

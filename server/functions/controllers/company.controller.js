@@ -94,22 +94,15 @@ async function updateCompany(req, res) {
 }
 
 async function updateProfilePicture(req, res) {
-    const _file = req.file;
+    const { imageUrl } = req.body;
     try {
         const { companyId } = req.body;
-        if (_file) {
-            const compressed = await resizeFile(_file.buffer);
-
-            const result = await uploadFileToStorage(
-                compressed,
-                "company/profile-pictures/" + companyId + ".jpeg"
-            );
-
+        if (imageUrl) {
             await Company.updateById(companyId, {
-                profilePhoto: result.publicUrl(),
+                profilePhoto: imageUrl,
             });
 
-            return res.status(404).send({
+            return res.status(200).send({
                 error: false,
                 message: "File uploaded successfully",
             });
