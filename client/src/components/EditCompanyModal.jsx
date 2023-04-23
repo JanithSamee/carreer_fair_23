@@ -54,7 +54,6 @@ function EditCompanyModal({
 						</FormControl>
 					</Box>
 					<FormControl
-						isRequired
 						isInvalid={formError != undefined && formError.error}
 					>
 						<FormLabel fontSize="xs" mb={0.5}>
@@ -65,17 +64,11 @@ function EditCompanyModal({
 							fontSize="xs"
 							placeholder={"Company Name"}
 							value={formInputs.name}
+							readOnly
 							w={200}
-							onChange={(e) =>
-								setFormInputs({
-									...formInputs,
-									name: e.target.value,
-								})
-							}
 						></Input>
 					</FormControl>
 					<FormControl
-						isRequired
 						isInvalid={formError != undefined && formError.error}
 					>
 						<FormLabel fontSize="xs" mb={0.5}>
@@ -87,12 +80,7 @@ function EditCompanyModal({
 							placeholder={email}
 							value={formInputs.email}
 							w={200}
-							onChange={(e) =>
-								setFormInputs({
-									...formInputs,
-									email: e.target.value,
-								})
-							}
+							readOnly
 						></Input>
 					</FormControl>
 					<FormControl
@@ -108,13 +96,19 @@ function EditCompanyModal({
 							size="xs"
 							w={55}
 							placeholder="0"
-							value={formInputs.maximumInterviews}
-							onChange={(e) =>
-								setFormInputs({
-									...formInputs,
-									maximumInterviews: parseInt(e),
-								})
+							value={
+								formInputs.maximumInterviews === NaN
+									? 0
+									: formInputs.maximumInterviews
 							}
+							onChange={(e) => {
+								if (e !== NaN) {
+									setFormInputs({
+										...formInputs,
+										maximumInterviews: e,
+									});
+								}
+							}}
 						>
 							<NumberInputField />
 							<NumberInputStepper>
@@ -157,10 +151,10 @@ function EditCompanyModal({
 						size="xs"
 						colorScheme="green"
 						isLoading={loading}
-						loadingText="Saving"
+						loadingText="Updating"
 						onClick={() => handleSubmit()}
 					>
-						Save
+						Update
 					</Button>
 				</ModalFooter>
 			</ModalContent>

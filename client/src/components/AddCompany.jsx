@@ -4,7 +4,7 @@ import CompanyModal from "./CompanyModal";
 import { useState } from "react";
 import { createCompany } from "../utils/api/company.api";
 
-function AddCompany() {
+function AddCompany({ setAddedCount, addedCount }) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [formInputs, setFormInputs] = useState({
 		email: "",
@@ -46,6 +46,7 @@ function AddCompany() {
 						duration: 9000,
 						isClosable: true,
 					});
+					setAddedCount(addedCount + 1);
 				}
 
 				setFormInputs({

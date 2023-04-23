@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import EditCompanyModal from "./EditCompanyModal";
-import { getCompany } from "../utils/api/company.api";
+import { getCompany, updateCompany } from "../utils/api/company.api";
 
 function CompanyCard({ name, img_url, companyID }) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -44,8 +44,27 @@ function CompanyCard({ name, img_url, companyID }) {
 	}, []);
 
 	async function handleSubmit() {
-		//const ID = "522";
-		console.log(formInputs);
+		setLoading(true);
+		const _res = await updateCompany(formInputs);
+		if (_res.error) {
+			toast({
+				title: "An error occurred.",
+				description: _res.message,
+				status: "error",
+				duration: 9000,
+				isClosable: true,
+			});
+			setLoading(false);
+		} else {
+			toast({
+				title: "Done",
+				description: "Company Updated Successfully !",
+				status: "success",
+				duration: 9000,
+				isClosable: true,
+			});
+			setLoading(false);
+		}
 		onClose();
 	}
 
@@ -66,7 +85,7 @@ function CompanyCard({ name, img_url, companyID }) {
 					</Stack>
 				</CardBody>
 			</Card>
-			{/* <EditCompanyModal
+			<EditCompanyModal
 				isOpen={isOpen}
 				onClose={onClose}
 				title={"Edit Company"}
@@ -78,7 +97,7 @@ function CompanyCard({ name, img_url, companyID }) {
 				handleSubmit={handleSubmit}
 				formError={formError}
 				loading={loading}
-			/> */}
+			/>
 		</div>
 	);
 }

@@ -7,12 +7,12 @@ import { getAllCompanies } from "../utils/api/company.api";
 function CompanyCardsGrid() {
 	//states
 	const [data, setData] = useState([]);
-	const [data2, setData2] = useState([]);
 	const toast = useToast();
+	const [addedCount, setAddedCount] = useState(0);
 	//APIs
 	useEffect(() => {
 		async function getCompanies() {
-			// const _res = await getAllCompanies();
+			const _res = await getAllCompanies();
 			//console.log(first)
 			if (_res.error) {
 				toast({
@@ -27,7 +27,8 @@ function CompanyCardsGrid() {
 			}
 		}
 		getCompanies();
-	}, []);
+		//console.log("done");
+	}, [addedCount]);
 	//console.log(data2[1]);
 	const companyCards = data.map((company, idx) => (
 		<GridItem key={idx}>
@@ -43,7 +44,10 @@ function CompanyCardsGrid() {
 			<Grid templateColumns="repeat(7	, 2fr)" gap={12} alignItems="center">
 				{companyCards}
 				<GridItem>
-					<AddCompany></AddCompany>
+					<AddCompany
+						setAddedCount={setAddedCount}
+						addedCount={addedCount}
+					></AddCompany>
 				</GridItem>
 			</Grid>
 		</>
