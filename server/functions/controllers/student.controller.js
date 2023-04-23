@@ -121,7 +121,17 @@ async function updatePreference(req, res) {
             });
         }
 
+        const isCVSubmited = await Student.isCVSubmited(indexNumber);
+
+        if (!isCVSubmited) {
+            return res.status(400).send({
+                error: true,
+                data: "Please upload a CV/Resume to update your preferences.",
+            });
+        }
+
         const preferenceRef = formatCompaniesAsRef(preferences);
+
         await Student.updateById(indexNumber, {
             preferenceList: preferenceRef,
         });

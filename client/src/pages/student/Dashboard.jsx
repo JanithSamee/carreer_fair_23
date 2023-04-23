@@ -115,7 +115,11 @@ function StudentDashboard() {
                     >
                         Change Profile
                     </Button>
-                    <UploadCVModal />
+                    <UploadCVModal
+                        cvUrl={userData.cvURL}
+                        userData={userData}
+                        setUserData={setuserData}
+                    />
                     <PreferenceSelectorModal
                         userData={userData}
                         setUserData={setuserData}

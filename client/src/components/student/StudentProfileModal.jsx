@@ -152,6 +152,9 @@ export default function StudentProfileModal({ isOpen, onClose, studentData }) {
                 setimageLoading(false);
             };
             reader.readAsDataURL(file);
+        } else {
+            //TODO:add toast
+            setLoading(false);
         }
     }
 

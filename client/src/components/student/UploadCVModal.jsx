@@ -15,8 +15,9 @@ import {
 import useAuth from "../../utils/providers/AuthProvider";
 import { handleFileUpload } from "../../utils/firebase/firebaseUtils";
 import { updateStudentCV } from "../../utils/api/student.api";
+import { Link } from "react-router-dom";
 
-const UploadCVModal = () => {
+const UploadCVModal = ({ cvUrl, userData, setUserData }) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const { user } = useAuth();
     const [file, setFile] = useState(null);
@@ -43,24 +44,33 @@ const UploadCVModal = () => {
                         setLoading(false);
                     }
                     console.log("done");
+                    setUserData({ ...userData, cvURL: res.data });
                     onClose();
                 }
                 setLoading(false);
             };
             reader.readAsDataURL(file);
+        } else {
+            //TODO:add toast
+            setLoading(false);
         }
     };
 
     return (
         <>
             <Button colorScheme="yellow" mt={4} onClick={onOpen} w={"100%"}>
-                Upload CV
+                Upload CV/Resume
             </Button>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Upload your CV</ModalHeader>
+                    <ModalHeader>Upload your CV/Resume</ModalHeader>
                     <ModalBody>
+                        {cvUrl && (
+                            <Button m={"4"} ml={0} as={Link} to={cvUrl}>
+                                Download My CV/Resume
+                            </Button>
+                        )}
                         <FormControl>
                             <FormLabel>Choose a PDF file to upload</FormLabel>
                             <Input

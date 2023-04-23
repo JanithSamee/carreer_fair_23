@@ -90,6 +90,15 @@ class Student {
         }
     }
 
+    static async isCVSubmited(id) {
+        const userDoc = await usersCollection.doc(id).get();
+
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            return userData.cvURL;
+        }
+        return null;
+    }
     static async getUsers() {
         const users = await usersCollection
             .select("firstName", "lastName", "indexNumber", "profilePhoto")
