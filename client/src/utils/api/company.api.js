@@ -17,30 +17,20 @@ export async function getAllCompanies() {
         return formatError(error);
     }
 }
-export async function getAllCompanies() {
-	try {
-		const _res = await base_api.get("company/all");
-		return _res.data;
-	} catch (error) {
-		(error.response && error.response.data) || {
-			error: true,
-			data: "Uknown Error!",
-		};
-	}
-}
+
 export async function getCompany(companyID) {
-	try {
-		//console.log(companyID);
-		if (companyID !== undefined) {
-			const _res = await base_api.get(
-				"company/single?companyId=".concat(companyID)
-			);
-			return _res.data;
-		}
-	} catch (error) {
-		(error.response && error.response.data) || {
-			error: true,
-			data: "Uknown Error!",
-		};
-	}
+    try {
+        //console.log(companyID);
+        if (companyID !== undefined) {
+            const _res = await base_api.get(
+                "company/single?companyId=".concat(companyID)
+            );
+            return _res.data;
+        }
+    } catch (error) {
+        (error.response && error.response.data) || {
+            error: true,
+            data: "Uknown Error!",
+        };
+    }
 }
