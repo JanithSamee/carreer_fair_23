@@ -11,6 +11,7 @@ import {
     FormControl,
     FormLabel,
     useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
 import useAuth from "../../utils/providers/AuthProvider";
 import { handleFileUpload } from "../../utils/firebase/firebaseUtils";
@@ -19,6 +20,8 @@ import { Link } from "react-router-dom";
 
 const UploadCVModal = ({ cvUrl, userData, setUserData }) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
+    const toast = useToast();
+
     const { user } = useAuth();
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -35,15 +38,33 @@ const UploadCVModal = ({ cvUrl, userData, setUserData }) => {
                     user.uid
                 );
                 if (res.error) {
-                    //TODO: add toast
                     setLoading(false);
+                    return toast({
+                        title: "An error occurred.",
+                        description: res.data,
+                        status: "error",
+                        duration: 9000,
+                        isClosable: true,
+                    });
                 } else {
                     const __res = await updateStudentCV(res.data);
                     if (__res.error) {
-                        //TODO: add toast
                         setLoading(false);
+                        return toast({
+                            title: "An error occurred.",
+                            description: __res.data,
+                            status: "error",
+                            duration: 9000,
+                            isClosable: true,
+                        });
                     }
-                    console.log("done");
+                    toast({
+                        title: "Success",
+                        description: "Successfully Uploaded!",
+                        status: "success",
+                        duration: 9000,
+                        isClosable: true,
+                    });
                     setUserData({ ...userData, cvURL: res.data });
                     onClose();
                 }
@@ -51,8 +72,14 @@ const UploadCVModal = ({ cvUrl, userData, setUserData }) => {
             };
             reader.readAsDataURL(file);
         } else {
-            //TODO:add toast
             setLoading(false);
+            return toast({
+                title: "Invalid Inputs!",
+                description: "Please Select a PDF to upload.",
+                status: "warning",
+                duration: 9000,
+                isClosable: true,
+            });
         }
     };
 

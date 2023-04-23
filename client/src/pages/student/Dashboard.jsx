@@ -15,6 +15,7 @@ import {
     FormLabel,
     useDisclosure,
     SimpleGrid,
+    useToast,
 } from "@chakra-ui/react";
 import { MdAccessTime, MdPerson } from "react-icons/md";
 import useAuth from "../../utils/providers/AuthProvider";
@@ -24,6 +25,7 @@ import PreferenceSelectorModal from "../../components/student/PreferenceSelector
 import UploadCVModal from "../../components/student/UploadCVModal";
 
 function StudentDashboard() {
+    const toast = useToast();
     const isMobile = useBreakpointValue({ base: true, md: false });
     const avatarSize = useBreakpointValue({ base: "md", sm: "xl" });
     const [userData, setuserData] = useState({});
@@ -33,7 +35,13 @@ function StudentDashboard() {
         async function getData() {
             const _res = await getStudent();
             if (_res.error) {
-                //TODO:add Toast
+                return toast({
+                    title: "An error occurred.",
+                    description: _res.data,
+                    status: "error",
+                    duration: 9000,
+                    isClosable: true,
+                });
             } else {
                 setuserData(_res.data);
             }

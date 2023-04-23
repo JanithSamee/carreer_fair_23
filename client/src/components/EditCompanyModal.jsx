@@ -118,21 +118,42 @@ function EditCompanyModal({
                     formInputs.companyId
                 );
                 if (res.error) {
-                    //TODO: add toast
                     setimageLoading(false);
+                    return toast({
+                        title: "An error occurred.",
+                        description: res.data,
+                        status: "error",
+                        duration: 9000,
+                        isClosable: true,
+                    });
                 } else {
                     const __res = await updateCompanyProfilePicture({
                         companyId: formInputs.companyId,
                         imageUrl: res.data,
                     });
                     if (__res.error) {
-                        //TODO: add toast
                         setimageLoading(false);
+                        return toast({
+                            title: "An error occurred.",
+                            description: __res.data,
+                            status: "error",
+                            duration: 9000,
+                            isClosable: true,
+                        });
                     }
                 }
                 setimageLoading(false);
             };
             reader.readAsDataURL(file);
+        } else {
+            setimageLoading(false);
+            return toast({
+                title: "Invalid Inputs!",
+                description: "Please Select a Photo to upload",
+                status: "warning",
+                duration: 9000,
+                isClosable: true,
+            });
         }
     }
     return (

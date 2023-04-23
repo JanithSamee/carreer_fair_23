@@ -114,8 +114,23 @@ export default function StudentProfileModal({ isOpen, onClose, studentData }) {
         setloading(true);
         event.preventDefault();
         const _res = await updateStudent(formInput);
-        console.log(_res);
-        //TODO:add Toast
+        if (_res.error) {
+            console.log(_res.data);
+            return toast({
+                title: "An error occurred.",
+                description: _res.data,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+            });
+        }
+        toast({
+            title: "Success",
+            description: "Successfully Saved!",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+        });
         setloading(false);
     };
     const [imageUrl, setImageUrl] = useState("");
@@ -139,22 +154,40 @@ export default function StudentProfileModal({ isOpen, onClose, studentData }) {
                     studentData.indexNumber
                 );
                 if (res.error) {
-                    //TODO: add toast
                     setimageLoading(false);
+                    return toast({
+                        title: "An error occurred.",
+                        description: res.data,
+                        status: "error",
+                        duration: 9000,
+                        isClosable: true,
+                    });
                 } else {
                     const __res = await updateStudentProfilePicture(res.data);
                     setuser({ ...user, photoURL: res.data });
                     if (__res.error) {
-                        //TODO: add toast
                         setimageLoading(false);
+                        return toast({
+                            title: "An error occurred.",
+                            description: __res.data,
+                            status: "error",
+                            duration: 9000,
+                            isClosable: true,
+                        });
                     }
                 }
                 setimageLoading(false);
             };
             reader.readAsDataURL(file);
         } else {
-            //TODO:add toast
-            setLoading(false);
+            setimageLoading(false);
+            return toast({
+                title: "Invalid Inputs!",
+                description: "Please Select a Photo to upload",
+                status: "warning",
+                duration: 9000,
+                isClosable: true,
+            });
         }
     }
 
