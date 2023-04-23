@@ -96,13 +96,9 @@ function EditCompanyModal({
                             size="xs"
                             w={55}
                             placeholder="0"
-                            value={
-                                formInputs.maximumInterviews === NaN
-                                    ? 0
-                                    : formInputs.maximumInterviews
-                            }
+                            value={formInputs.maximumInterviews || 0}
                             onChange={(e) => {
-                                if (!e) {
+                                if (e) {
                                     const _num = parseInt(e) || 0;
                                     setFormInputs({
                                         ...formInputs,

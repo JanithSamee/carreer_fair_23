@@ -31,7 +31,7 @@ function CompanyCard({ name, img_url, companyID }) {
             if (_res.error) {
                 toast({
                     title: "An error occurred.",
-                    description: _res.message,
+                    description: _res.data,
                     status: "error",
                     duration: 9000,
                     isClosable: true,
@@ -51,7 +51,7 @@ function CompanyCard({ name, img_url, companyID }) {
         if (_res.error) {
             toast({
                 title: "An error occurred.",
-                description: _res.message,
+                description: _res.data,
                 status: "error",
                 duration: 9000,
                 isClosable: true,
@@ -72,16 +72,17 @@ function CompanyCard({ name, img_url, companyID }) {
 
     return (
         <div>
-            <Card minH={135} minW={135} justify="center">
+            <Card
+                minH={135}
+                minW={135}
+                justify="center"
+                onClick={onOpen}
+                cursor={"pointer"}
+            >
                 <CardBody>
                     <Stack align={"center"}>
                         <Avatar name={name} src={img_url} size="lg"></Avatar>
-                        <Heading
-                            size="xs"
-                            onClick={onOpen}
-                            textAlign={"center"}
-                            cursor="pointer"
-                        >
+                        <Heading size="xs" textAlign={"center"}>
                             {name}
                         </Heading>
                     </Stack>
