@@ -22,32 +22,88 @@ import {
     AvatarBadge,
     Center,
     Text,
+    useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { handleFileUpload } from "../utils/firebase/firebaseUtils";
 import { useEffect } from "react";
 import { MdAdd } from "react-icons/md";
-import { updateCompanyProfilePicture } from "../utils/api/company.api";
+import {
+    getCompany,
+    updateCompany,
+    updateCompanyProfilePicture,
+} from "../utils/api/company.api";
 
 function EditCompanyModal({
     isOpen,
     onClose,
     title,
-    setFormInputs,
-    formInputs,
-    handleSubmit,
     email,
-    formError,
-    loading,
+    companyId,
+    imgUrl,
 }) {
     const [imageLoading, setimageLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState("");
 
-    useEffect(() => {
-        if (formInputs && formInputs.profilePhoto) {
-            setImageUrl(formInputs.profilePhoto);
+    const [formInputs, setFormInputs] = useState({
+        email: "",
+        name: "",
+        maximumInterviews: "",
+        startTime: "",
+        endTime: "",
+        requirements: "",
+    });
+    const [formError, setFormError] = useState({ error: false, message: "" });
+    const [loading, setLoading] = useState(false);
+    const toast = useToast();
+
+    async function handleSubmit() {
+        setLoading(true);
+        const _res = await updateCompany(formInputs);
+        if (_res.error) {
+            toast({
+                title: "An error occurred.",
+                description: _res.data,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+            });
+            setLoading(false);
+        } else {
+            toast({
+                title: "Done",
+                description: "Company Updated Successfully !",
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+            });
+            setLoading(false);
         }
-    }, []);
+        onClose();
+    }
+
+    useEffect(() => {
+        async function getCompanyDetails(comID) {
+            const _res = await getCompany(comID);
+            if (_res.error) {
+                toast({
+                    title: "An error occurred.",
+                    description: _res.data,
+                    status: "error",
+                    duration: 9000,
+                    isClosable: true,
+                });
+            } else {
+                setFormInputs(_res.data);
+            }
+        }
+        if (companyId) {
+            getCompanyDetails(companyId);
+        }
+        if (imgUrl) {
+            setImageUrl(imgUrl);
+        }
+    }, [companyId]);
 
     function handleImageUpload(e) {
         setimageLoading(true);
@@ -79,7 +135,6 @@ function EditCompanyModal({
             reader.readAsDataURL(file);
         }
     }
-
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -122,7 +177,7 @@ function EditCompanyModal({
                             size="xs"
                             fontSize="xs"
                             placeholder={"Company Name"}
-                            value={formInputs.name}
+                            value={formInputs && formInputs.name}
                             readOnly
                             w={200}
                         ></Input>
@@ -137,7 +192,7 @@ function EditCompanyModal({
                             size="xs"
                             fontSize="xs"
                             placeholder={email}
-                            value={formInputs.email}
+                            value={formInputs && formInputs.email}
                             w={200}
                             readOnly
                         ></Input>
@@ -155,7 +210,10 @@ function EditCompanyModal({
                             size="xs"
                             w={55}
                             placeholder="0"
-                            value={formInputs.maximumInterviews || 0}
+                            value={
+                                (formInputs && formInputs.maximumInterviews) ||
+                                0
+                            }
                             onChange={(e) => {
                                 if (e) {
                                     const _num = parseInt(e) || 0;
@@ -183,7 +241,7 @@ function EditCompanyModal({
                         <Textarea
                             size="xs"
                             placeholder={"Company Description"}
-                            value={formInputs.requirements}
+                            value={formInputs && formInputs.requirements}
                             onChange={(e) =>
                                 setFormInputs({
                                     ...formInputs,
