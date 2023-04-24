@@ -12,8 +12,14 @@ import CompanyCardsGrid from "../components/CompanyCardsGrid";
 import AdminManagement from "../components/admin/AdminManagement";
 import StatisticsPage from "../components/admin/StatisticsPage";
 import AdminAccountsTab from "../components/admin/AdminAccountsTab";
+import { useState } from "react";
 
 function Admin() {
+    const [currentTab, setcurrentTab] = useState(0);
+
+    function handleTabChange(event) {
+        setcurrentTab(event);
+    }
     return (
         <div>
             <Text
@@ -31,6 +37,8 @@ function Admin() {
                 mt={5}
                 ml={5}
                 size="sm"
+                onChange={handleTabChange}
+                index={currentTab}
             >
                 <TabList>
                     <Tab>Statistics</Tab>
@@ -41,23 +49,23 @@ function Admin() {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <StatisticsPage />
+                        {currentTab === 0 && <StatisticsPage />}
                     </TabPanel>
                     <TabPanel>
                         <Grid templateColumns="repeat(7, 1fr)" gap={3}>
-                            <StudentCardGrid />
+                            {currentTab === 1 && <StudentCardGrid />}
                         </Grid>
                     </TabPanel>
                     <TabPanel>
                         <Grid templateColumns="repeat(7, 1fr)" gap={3}>
-                            <CompanyCardsGrid />
+                            {currentTab === 2 && <CompanyCardsGrid />}
                         </Grid>
                     </TabPanel>
                     <TabPanel>
-                        <AdminManagement />
+                        {currentTab === 3 && <AdminManagement />}
                     </TabPanel>
                     <TabPanel>
-                        <AdminAccountsTab />
+                        {currentTab === 4 && <AdminAccountsTab />}
                     </TabPanel>
                 </TabPanels>
             </Tabs>

@@ -14,7 +14,6 @@ const StatisticsPage = () => {
     const studentAppliedCount = 250;
     const registeredCompanyCount = 50;
     const cvUploadedCount = 300;
-
     return (
         <Flex direction="column" align="center" justify="center">
             <Box
