@@ -2,13 +2,13 @@ import useAuth from "./AuthProvider";
 import LoadingPage from "../../components/common/LoadingComp";
 import Unauthorized from "../../components/common/Unauthorized";
 
-function PrivateStudentRoute({ children }) {
+function PrivateAdminRoute({ children }) {
     const { user, loading } = useAuth();
 
     if (loading || user == {}) {
         return <LoadingPage></LoadingPage>;
     } else {
-        return user.role && user.role === "student" ? (
+        return user.role && user.role === "admin" ? (
             <>{children}</>
         ) : (
             <Unauthorized></Unauthorized>
@@ -16,4 +16,4 @@ function PrivateStudentRoute({ children }) {
     }
 }
 
-export default PrivateStudentRoute;
+export default PrivateAdminRoute;
