@@ -6,6 +6,8 @@ import {
     TabPanel,
     Grid,
     Text,
+    Box,
+    Button,
 } from "@chakra-ui/react";
 import StudentCardGrid from "../components/StudentCardsGrid";
 import CompanyCardsGrid from "../components/CompanyCardsGrid";
@@ -13,24 +15,47 @@ import AdminManagement from "../components/admin/AdminManagement";
 import StatisticsPage from "../components/admin/StatisticsPage";
 import AdminAccountsTab from "../components/admin/AdminAccountsTab";
 import { useState } from "react";
+import useAuth from "../utils/providers/AuthProvider";
 
 function Admin() {
     const [currentTab, setcurrentTab] = useState(0);
+    const { logout, user } = useAuth();
 
     function handleTabChange(event) {
         setcurrentTab(event);
     }
     return (
         <div>
-            <Text
-                color={"blackAlpha.500"}
-                fontStyle={"oblique"}
-                fontSize={"2xl"}
-                fontWeight={"bold"}
-                m={4}
+            <Box
+                w={"100%"}
+                display={"flex"}
+                flexDir={"row"}
+                alignItems={"baseline"}
+                justifyContent={"space-between"}
             >
-                Admin Panel
-            </Text>
+                <Text
+                    color={"blackAlpha.500"}
+                    fontStyle={"oblique"}
+                    fontSize={"2xl"}
+                    fontWeight={"bold"}
+                    m={4}
+                >
+                    Admin Panel
+                </Text>
+                <Box display={"flex"} flexDir={"row"} alignItems={"baseline"}>
+                    <Text color="GrayText" fontStyle={"italic"} mr={2}>
+                        {user && user.email}
+                    </Text>
+                    <Button
+                        float={"right"}
+                        mr={4}
+                        colorScheme="red"
+                        onClick={() => logout()}
+                    >
+                        Logout
+                    </Button>
+                </Box>
+            </Box>
             <Tabs
                 variant="soft-rounded"
                 colorScheme="teal"

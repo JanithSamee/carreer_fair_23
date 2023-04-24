@@ -25,16 +25,62 @@ import {
     Td,
 } from "@chakra-ui/react";
 import { AddCompanyModalForCoodinator } from "./AddCompanyModalForCoodinator";
+import useAuth from "../../utils/providers/AuthProvider";
 
 const AdminAccountsTab = () => {
-    const [username, setUsername] = useState("John Doe");
-    const [email, setEmail] = useState("johndoe@example.com");
+    const { logout, user } = useAuth();
+    const [loading, setloading] = useState(false);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const handlePasswordChange = (e) => {
-        // TODO: Implement password change logic
-        onClose();
+    const handleSubmitUpdatePW = async (event) => {
+        event.preventDefault();
+        setloading(true);
+        if (
+            formInputUpdatePW.newPassword !== formInputUpdatePW.confirmPassword
+        ) {
+            setloading(false);
+
+            return setformErrorUpdatePW("Password Does not Match!");
+        }
+        if (
+            !formInputUpdatePW.newPassword ||
+            !formInputUpdatePW.confirmPassword
+            // !formInputUpdatePW.newPassword
+        ) {
+            setloading(false);
+
+            return setformErrorUpdatePW("Invalid Inputs");
+        }
+
+        try {
+            // Reauthenticate user with current password
+
+            // Update password
+            // console.log(formInputUpdatePW);
+            await updatePassword(
+                auth.currentUser,
+                formInputUpdatePW.newPassword
+            );
+            setloading(false);
+            onClose();
+            toast({
+                title: "Password updated!",
+                description: "Your password has been updated successfully.",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            });
+        } catch (error) {
+            setloading(false);
+            toast({
+                title: "Error",
+                description: error.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
     };
 
     const [users, setUsers] = useState([
@@ -66,8 +112,8 @@ const AdminAccountsTab = () => {
                     <Input
                         type="text"
                         placeholder="Enter your username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        readOnly
+                        defaultValue={user && user.displayName}
                     />
                 </FormControl>
                 <FormControl mb={4}>
@@ -75,8 +121,8 @@ const AdminAccountsTab = () => {
                     <Input
                         type="email"
                         placeholder="Enter your email address"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        readOnly
+                        defaultValue={user && user.email}
                     />
                 </FormControl>
                 <Button onClick={onOpen} mb={4} colorScheme="orange">
@@ -111,7 +157,7 @@ const AdminAccountsTab = () => {
                             />
                         </FormControl>
                         <Button
-                            onClick={handlePasswordChange}
+                            onClick={handleSubmitUpdatePW}
                             colorScheme="green"
                         >
                             Save Changes
