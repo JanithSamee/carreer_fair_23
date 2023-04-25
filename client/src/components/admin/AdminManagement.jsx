@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Avatar,
     Box,
@@ -16,10 +16,15 @@ import {
     Tr,
 } from "@chakra-ui/react";
 import { AddCompanyModalForCoodinator } from "./AddCompanyModalForCoodinator";
+import { getGlobalParams, setGlobalParams } from "../../utils/api/global.api";
 
 const AdminManagement = () => {
-    const [eventStartTime, setEventStartTime] = useState("");
-    const [eventEndTime, setEventEndTime] = useState("");
+    const [eventDate, seteventDate] = useState("");
+    const [registrationDeadLine, setregistrationDeadLine] = useState("");
+    const [preferenceUpdateDeadLine, setpreferenceUpdateDeadLine] =
+        useState("");
+    const [preferenceUpdateStart, setpreferenceUpdateStart] = useState("");
+    // const [eventEndTime, setEventEndTime] = useState("");
     const [users, setUsers] = useState([
         { id: 1, name: "User 1", companies: [] },
         { id: 2, name: "User 2", companies: [] },
@@ -30,6 +35,19 @@ const AdminManagement = () => {
     const [isAddingCompany, setIsAddingCompany] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
+    async function updateParams() {
+        const _res = await setGlobalParams({
+            eventDate,
+            registrationDeadLine,
+            preferenceUpdateDeadLine,
+            preferenceUpdateStart,
+        });
+        if (_res.error) {
+            //TODO: add toast
+            return;
+        }
+    }
+
     const handleAddCompany = (user, company) => {
         const updatedUsers = users.map((u) =>
             u.id === user.id
@@ -38,6 +56,20 @@ const AdminManagement = () => {
         );
         setUsers(updatedUsers);
     };
+
+    // useEffect(() => {
+    //     async function getData() {
+    //         const _res = await getGlobalParams();
+    //         if (_res.error) {
+    //             //TODO: add toast
+    //             return;
+    //         }
+    //         console.log(_res);
+    //         seteventDate(new Date(_res.data.eventDate));
+    //     }
+    //     getData();
+    // }, []);
+
     return (
         <Box>
             <Text
@@ -50,23 +82,27 @@ const AdminManagement = () => {
             </Text>
             <Box ml={4}>
                 <Center>
-                    <FormControl id="eventStartTime" m={4}>
+                    <FormControl id="eventDate" m={4}>
                         <FormLabel>Event Date</FormLabel>
                         <Input
                             type="datetime-local"
-                            value={eventStartTime}
-                            onChange={(event) =>
-                                setEventStartTime(event.target.value)
-                            }
+                            value={eventDate}
+                            onChange={(event) => {
+                                const date = new Date(event.target.value);
+                                const etcTime = date.toLocaleString("en-US", {
+                                    timeZone: "America/New_York",
+                                });
+                                seteventDate(etcTime);
+                            }}
                         />
                     </FormControl>
                     <FormControl id="eventEndTime" m={4}>
                         <FormLabel>Sign Up DeadLine For Student</FormLabel>
                         <Input
                             type="datetime-local"
-                            value={eventEndTime}
+                            value={registrationDeadLine}
                             onChange={(event) =>
-                                setEventEndTime(event.target.value)
+                                setregistrationDeadLine(event.target.value)
                             }
                         />
                     </FormControl>
@@ -76,9 +112,9 @@ const AdminManagement = () => {
                         <FormLabel>Preference Update Start Time</FormLabel>
                         <Input
                             type="datetime-local"
-                            value={eventStartTime}
+                            value={preferenceUpdateStart}
                             onChange={(event) =>
-                                setEventStartTime(event.target.value)
+                                setpreferenceUpdateStart(event.target.value)
                             }
                         />
                     </FormControl>
@@ -86,9 +122,9 @@ const AdminManagement = () => {
                         <FormLabel>Preference Update Close Time</FormLabel>
                         <Input
                             type="datetime-local"
-                            value={eventEndTime}
+                            value={preferenceUpdateDeadLine}
                             onChange={(event) =>
-                                setEventEndTime(event.target.value)
+                                setpreferenceUpdateDeadLine(event.target.value)
                             }
                         />
                     </FormControl>

@@ -35,4 +35,6 @@ function formatError(error) {
         return { error: true, data: "Uknown Error Occured!" };
     }
 }
+
+function ISOtimestringLocalTimeString(date) {}
 export { formatUserFromAuth, formatError };
