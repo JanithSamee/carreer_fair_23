@@ -26,6 +26,18 @@ async function signUp(req, res) {
                 data: "Invalid Index Number. Ex: 18XXXXX ",
             });
         }
+
+        const globalObject = await Global.find();
+
+        if (
+            globalObject.registrationDeadLine.getTime() <= currentDate.getTime()
+        ) {
+            return res.status(400).send({
+                error: true,
+                data: "Registration Closed! \n,We're sorry, but registration for this event is now closed. The sign-up period has ended, and we are no longer accepting new registrations. ",
+            });
+        }
+
         // Create a new user account using Firebase Admin SDK
         const userRecord = await auth.createUser({
             email,
@@ -113,7 +125,17 @@ async function updatePreference(req, res) {
             });
         }
         if (
-            globalObject.registrationDeadLine.getTime() <= currentDate.getTime()
+            globalObject.preferenceUpdateStart.getTime() >=
+            currentDate.getTime()
+        ) {
+            return res.status(400).send({
+                error: true,
+                data: "We're sorry, but Preference update  has not yet opened. We're still finalizing the details, but we expect registration to open soon.",
+            });
+        }
+        if (
+            globalObject.preferenceUpdateDeadLine.getTime() <=
+            currentDate.getTime()
         ) {
             return res.status(400).send({
                 error: true,
