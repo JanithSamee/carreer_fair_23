@@ -2,7 +2,13 @@ import { Avatar, Stack, Text } from "@chakra-ui/react";
 import CompanyList from "./CompanyList";
 import AddPrefComp from "./AddPrefComp";
 
-function StudentModalContent({ name, img_url, name_initial, index_number }) {
+function StudentModalContent({
+	name,
+	img_url,
+	name_initial,
+	index_number,
+	interviewsList,
+}) {
 	return (
 		<div>
 			<Stack align="center" spacing={0.5}>
@@ -10,7 +16,7 @@ function StudentModalContent({ name, img_url, name_initial, index_number }) {
 				<Text>{index_number}</Text>
 				<Text>{name_initial}</Text>
 				<CompanyList></CompanyList>
-				<AddPrefComp></AddPrefComp>
+				<AddPrefComp interviewsList={interviewsList}></AddPrefComp>
 			</Stack>
 		</div>
 	);

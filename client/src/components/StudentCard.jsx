@@ -16,9 +16,14 @@ import {
 } from "@chakra-ui/react";
 import StudentModalContent from "./StudentModalContent";
 
-function StudentCard({ name, index_number, img_url, name_initial }) {
+function StudentCard({
+	name,
+	index_number,
+	img_url,
+	name_initial,
+	interviewsList,
+}) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
 	return (
 		<div>
 			<Card maxW={125}>
@@ -46,6 +51,7 @@ function StudentCard({ name, index_number, img_url, name_initial }) {
 							index_number={index_number}
 							name_initial={name_initial}
 							img_url={img_url}
+							interviewsList={interviewsList}
 						></StudentModalContent>
 					</ModalBody>
 

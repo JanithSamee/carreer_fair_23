@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
 import CloseButton from "./CloseButton";
 import axios from "axios";
 
-function AddPrefComp() {
+function AddPrefComp({ interviewsList }) {
 	//states
 	const [company, setCompany] = useState("undefined");
 	const [time, setTime] = useState();
@@ -36,6 +36,7 @@ function AddPrefComp() {
 				])
 			)
 			.catch((error) => console.error(error));
+		setInterveiwList(interviewsList);
 	}, []);
 	//event handling
 	const handleChangeCompany = (e) => setCompany(e.target.value);
@@ -56,7 +57,6 @@ function AddPrefComp() {
 			}
 		}
 	}
-	//mapped components
 	const assignedInterveiws = interveiwList.map((interveiw, idx) => (
 		<Flex
 			boxShadow="sm"

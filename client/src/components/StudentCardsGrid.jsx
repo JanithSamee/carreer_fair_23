@@ -1,41 +1,53 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import StudentCard from "./StudentCard";
-import { GridItem } from "@chakra-ui/react";
+import { GridItem, useToast } from "@chakra-ui/react";
+import { getAllStudents } from "../utils/api/student.api";
 
 function StudentCardGrid() {
 	//states
-	const [data, setData] = useState([]);
+	const [data, setData] = useState([
+		{
+			indexNumber: "",
+			firstName: "",
+			lastName: "",
+			cvURL: "",
+			preferenceCarrierChoise: "",
+			preferenceList: "",
+			interviewsList: "",
+			interviewsQueue: "",
+			profilePhoto: "",
+			createdAt: "",
+		},
+	]);
+	const toast = useToast();
 	//APIs
 	useEffect(() => {
 		//console.count("StudentCardGrid");
-		axios
-			.get("https://dog.ceo/api/breeds/image/random") //Mock API
-			.then((response) =>
-				setData([
-					{
-						student_name: "Geshan Sudasinghe",
-						index_number: "180123A",
-						img_url: "fmf",
-						name_initial: "Sudasinghe K.S.G.S",
-					},
-					{
-						student_name: "Geshan Sudasinghe",
-						index_number: "180123B",
-						img_url: "fmf",
-						name_initial: "Perera A.B.C",
-					},
-				])
-			)
-			.catch((error) => console.error(error));
+		async function getAll() {
+			const _res = await getAllStudents();
+			if (_res.error) {
+				toast({
+					title: "An error occured !",
+					description: _res.data,
+					status: "error",
+					duration: 9000,
+					isClosable: true,
+				});
+			} else {
+				setData(_res.data);
+				//console.log(_res.data);
+			}
+		}
+		getAll();
 	}, []);
 	const studentCards = data.map((student) => (
-		<GridItem key={student.index_number}>
+		<GridItem key={student.indexNumber}>
 			<StudentCard
-				name={student.student_name}
-				img_url={student.img_url}
-				index_number={student.index_number}
-				name_initial={student.name_initial}
+				name={student.firstName}
+				img_url={student.profilePhoto}
+				index_number={student.indexNumber}
+				name_initial={student.firstName + " " + student.lastName}
+				interviewsList={student.interviewsList}
 			></StudentCard>
 		</GridItem>
 	));
