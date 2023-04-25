@@ -136,7 +136,7 @@ export default function StudentProfileModal({ isOpen, onClose, studentData }) {
 	const [imageUrl, setImageUrl] = useState("");
 
 	useEffect(() => {
-		console.count("StudentProfileModal");
+		//console.count("StudentProfileModal");
 		if (studentData && studentData.profilePhoto) {
 			setImageUrl(studentData.profilePhoto);
 		}
