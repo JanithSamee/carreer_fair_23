@@ -14,12 +14,19 @@ import {
     Th,
     Thead,
     Tr,
+    useToast,
 } from "@chakra-ui/react";
 import { AddCompanyModalForCoodinator } from "./AddCompanyModalForCoodinator";
-import { getGlobalParams, setGlobalParams } from "../../utils/api/global.api";
+import {
+    getGlobalParams,
+    updateGlobalParams,
+} from "../../utils/api/global.api";
+import { ISOtimestringLocalTimeString } from "../../utils/helpers/formatter";
 
 const AdminManagement = () => {
     const [eventDate, seteventDate] = useState("");
+    const [loadingParams, setloadingParams] = useState(false);
+    const toast = useToast();
     const [registrationDeadLine, setregistrationDeadLine] = useState("");
     const [preferenceUpdateDeadLine, setpreferenceUpdateDeadLine] =
         useState("");
@@ -36,16 +43,32 @@ const AdminManagement = () => {
     const [selectedUser, setSelectedUser] = useState(null);
 
     async function updateParams() {
-        const _res = await setGlobalParams({
+        setloadingParams(true);
+        const _res = await updateGlobalParams({
             eventDate,
             registrationDeadLine,
             preferenceUpdateDeadLine,
             preferenceUpdateStart,
         });
+        setloadingParams(false);
+
         if (_res.error) {
-            //TODO: add toast
+            toast({
+                title: "An error occurred.",
+                description: _res.data,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+            });
             return;
         }
+        toast({
+            title: "Updated Succesfully!",
+            description: "",
+            status: "success",
+            duration: 4000,
+            isClosable: true,
+        });
     }
 
     const handleAddCompany = (user, company) => {
@@ -57,18 +80,32 @@ const AdminManagement = () => {
         setUsers(updatedUsers);
     };
 
-    // useEffect(() => {
-    //     async function getData() {
-    //         const _res = await getGlobalParams();
-    //         if (_res.error) {
-    //             //TODO: add toast
-    //             return;
-    //         }
-    //         console.log(_res);
-    //         seteventDate(new Date(_res.data.eventDate));
-    //     }
-    //     getData();
-    // }, []);
+    useEffect(() => {
+        async function getData() {
+            setloadingParams(true);
+            const _res = await getGlobalParams();
+            setloadingParams(false);
+
+            if (_res.error) {
+                toast({
+                    title: "An error occurred.",
+                    description: _res.data,
+                    status: "error",
+                    duration: 9000,
+                    isClosable: true,
+                });
+                return;
+            }
+            _res.data.eventDate && seteventDate(_res.data.eventDate);
+            _res.data.registrationDeadLine &&
+                setregistrationDeadLine(_res.data.registrationDeadLine);
+            _res.data.preferenceUpdateStart &&
+                setpreferenceUpdateStart(_res.data.preferenceUpdateStart);
+            _res.data.preferenceUpdateDeadLine &&
+                setpreferenceUpdateDeadLine(_res.data.preferenceUpdateDeadLine);
+        }
+        getData();
+    }, []);
 
     return (
         <Box>
@@ -86,13 +123,10 @@ const AdminManagement = () => {
                         <FormLabel>Event Date</FormLabel>
                         <Input
                             type="datetime-local"
-                            value={eventDate}
+                            value={ISOtimestringLocalTimeString(eventDate)}
                             onChange={(event) => {
                                 const date = new Date(event.target.value);
-                                const etcTime = date.toLocaleString("en-US", {
-                                    timeZone: "America/New_York",
-                                });
-                                seteventDate(etcTime);
+                                seteventDate(date.toISOString());
                             }}
                         />
                     </FormControl>
@@ -100,10 +134,13 @@ const AdminManagement = () => {
                         <FormLabel>Sign Up DeadLine For Student</FormLabel>
                         <Input
                             type="datetime-local"
-                            value={registrationDeadLine}
-                            onChange={(event) =>
-                                setregistrationDeadLine(event.target.value)
-                            }
+                            value={ISOtimestringLocalTimeString(
+                                registrationDeadLine
+                            )}
+                            onChange={(event) => {
+                                const date = new Date(event.target.value);
+                                setregistrationDeadLine(date.toISOString());
+                            }}
                         />
                     </FormControl>
                 </Center>
@@ -112,24 +149,37 @@ const AdminManagement = () => {
                         <FormLabel>Preference Update Start Time</FormLabel>
                         <Input
                             type="datetime-local"
-                            value={preferenceUpdateStart}
-                            onChange={(event) =>
-                                setpreferenceUpdateStart(event.target.value)
-                            }
+                            value={ISOtimestringLocalTimeString(
+                                preferenceUpdateStart
+                            )}
+                            onChange={(event) => {
+                                const date = new Date(event.target.value);
+                                setpreferenceUpdateStart(date.toISOString());
+                            }}
                         />
                     </FormControl>
                     <FormControl id="eventEndTime" m={4}>
                         <FormLabel>Preference Update Close Time</FormLabel>
                         <Input
                             type="datetime-local"
-                            value={preferenceUpdateDeadLine}
-                            onChange={(event) =>
-                                setpreferenceUpdateDeadLine(event.target.value)
-                            }
+                            value={ISOtimestringLocalTimeString(
+                                preferenceUpdateDeadLine
+                            )}
+                            onChange={(event) => {
+                                const date = new Date(event.target.value);
+                                setpreferenceUpdateDeadLine(date.toISOString());
+                            }}
                         />
                     </FormControl>
                 </Center>
-                <Button colorScheme="facebook">Save Params</Button>
+                <Button
+                    colorScheme="facebook"
+                    onClick={updateParams}
+                    isLoading={loadingParams}
+                    loadingText={"Loading..."}
+                >
+                    Save Params
+                </Button>
             </Box>
             <Text
                 color={"GrayText"}

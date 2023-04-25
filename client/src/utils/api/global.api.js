@@ -9,8 +9,9 @@ export async function getGlobalParams() {
         return formatError(error);
     }
 }
-export async function setGlobalParams(formData) {
+export async function updateGlobalParams(formData) {
     try {
+        console.log(formData);
         const _res = await base_api.post("/global/set", formData);
         return _res.data;
     } catch (error) {
