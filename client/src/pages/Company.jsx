@@ -17,6 +17,7 @@ function Company() {
 	const [data, setData] = useState([]);
 	//APIs
 	useEffect(() => {
+		//console.count("Company");
 		axios
 			.get("https://dog.ceo/api/breeds/image/random") //Mock API
 			.then((response) =>

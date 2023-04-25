@@ -83,6 +83,7 @@ function EditCompanyModal({
 	}
 
 	useEffect(() => {
+		//console.count("EditCompanyModal");
 		async function getCompanyDetails(comID) {
 			const _res = await getCompany(comID);
 			if (_res.error) {

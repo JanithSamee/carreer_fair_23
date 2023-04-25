@@ -8,6 +8,7 @@ function StudentCardGrid() {
 	const [data, setData] = useState([]);
 	//APIs
 	useEffect(() => {
+		//console.count("StudentCardGrid");
 		axios
 			.get("https://dog.ceo/api/breeds/image/random") //Mock API
 			.then((response) =>

@@ -24,6 +24,7 @@ function AddPrefComp() {
 	const [companyList, setCompanyList] = useState([{}]);
 	//APIs
 	useEffect(() => {
+		//console.count("add pref comp");
 		axios
 			.get("https://dog.ceo/api/breeds/image/random")
 			.then((response) =>
