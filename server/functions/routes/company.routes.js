@@ -29,7 +29,6 @@ companyRouter.post("/add", autherenticateAdmin, addCompany);
 companyRouter.post("/update", autherenticateAdmin, updateCompany);
 companyRouter.post(
     "/update-profile-picture",
-    upload.single("image"),
     autherenticateAdmin,
     updateProfilePicture
 );

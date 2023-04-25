@@ -8,6 +8,7 @@ import StudentDashboard from "./pages/student/Dashboard";
 import NotFound from "./pages/NotFound";
 import Unauthorized from "./components/common/Unauthorized";
 import PrivateStudentRoute from "./utils/providers/StudentPrivateRoutes";
+import PrivateAdminRoute from "./utils/providers/AdminPrivateRoutes";
 import VerfyTheEmail from "./pages/VerfyTheEmail";
 import Navbar from "./components/common/NavBar";
 import { Box } from "@chakra-ui/react";
@@ -32,8 +33,14 @@ function App() {
                         />
                     </Route>
                     <Route path="/admin">
-                        {/* TODO: add private routes */}
-                        <Route path="dashboard" element={<Admin></Admin>} />
+                        <Route
+                            path="dashboard"
+                            element={
+                                <PrivateAdminRoute>
+                                    <Admin></Admin>
+                                </PrivateAdminRoute>
+                            }
+                        />
                     </Route>
                     <Route path="*" Component={NotFound} />
                     <Route path="/unauthorized" Component={Unauthorized} />
