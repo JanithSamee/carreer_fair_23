@@ -96,18 +96,12 @@ function EditCompanyModal({
 							size="xs"
 							w={55}
 							placeholder="0"
-							value={
-								formInputs.maximumInterviews === NaN
-									? 0
-									: formInputs.maximumInterviews
-							}
+							value={formInputs.maximumInterviews}
 							onChange={(e) => {
-								if (e !== NaN) {
-									setFormInputs({
-										...formInputs,
-										maximumInterviews: e,
-									});
-								}
+								setFormInputs({
+									...formInputs,
+									maximumInterviews: e,
+								});
 							}}
 						>
 							<NumberInputField />
