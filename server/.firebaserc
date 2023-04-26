@@ -1,6 +1,7 @@
 {
   "projects": {
-    "ee-career-fair-23-dev": "career-fair-23-dev"
+    "dev": "career-fair-23-dev",
+    "prod": "eespire2023"
   },
   "targets": {},
   "etags": {}

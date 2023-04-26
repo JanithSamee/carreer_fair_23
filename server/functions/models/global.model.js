@@ -10,15 +10,25 @@ class Global {
             data.registrationDeadLine || "2023.04.01"
         );
         this.eventDate = new Date(data.eventDate || "2023.04.01");
+        this.preferenceUpdateStart = new Date(
+            data.preferenceUpdateStart || "2023.04.01"
+        );
+        this.preferenceUpdateDeadLine = new Date(
+            data.preferenceUpdateDeadLine || "2023.04.01"
+        );
     }
 
     // Save the user data to Firestore
     async save() {
         try {
             const userRef = globalCollection.doc("v1");
-            await userRef.set({
+            await userRef.update({
                 registrationDeadLine: new Date(this.registrationDeadLine),
                 eventDate: new Date(this.eventDate),
+                preferenceUpdateDeadLine: new Date(
+                    this.preferenceUpdateDeadLine
+                ),
+                preferenceUpdateStart: new Date(this.preferenceUpdateStart),
             });
             return this;
         } catch (error) {
@@ -30,6 +40,8 @@ class Global {
         return {
             registrationDeadLine: this.registrationDeadLine,
             eventDate: this.eventDate,
+            preferenceUpdateDeadLine: this.preferenceUpdateDeadLine,
+            preferenceUpdateStart: this.preferenceUpdateStart,
         };
     }
 
@@ -47,8 +59,19 @@ class Global {
                 const eventDate = new Date(
                     globalData.eventDate._seconds * 1000
                 );
+                const preferenceUpdateDeadLine = new Date(
+                    globalData.preferenceUpdateDeadLine._seconds * 1000
+                );
+                const preferenceUpdateStart = new Date(
+                    globalData.preferenceUpdateStart._seconds * 1000
+                );
 
-                return new Global({ registrationDeadLine, eventDate });
+                return new Global({
+                    registrationDeadLine,
+                    eventDate,
+                    preferenceUpdateDeadLine,
+                    preferenceUpdateStart,
+                });
             }
             return null;
         } catch (error) {

@@ -3,16 +3,28 @@ import { formatError } from "../utils/formatData.js";
 
 async function setParams(req, res) {
     try {
-        const { registrationDeadLine, eventDate } = req.body;
-        const globalData = new Global({ registrationDeadLine, eventDate });
+        const {
+            registrationDeadLine,
+            eventDate,
+            preferenceUpdateDeadLine,
+            preferenceUpdateStart,
+        } = req.body;
+        const globalData = new Global({
+            registrationDeadLine,
+            eventDate,
+            preferenceUpdateDeadLine,
+            preferenceUpdateStart,
+        });
 
-        console.log(globalData);
         await globalData.save();
+
         res.status(200).send({
             error: false,
             data: {
                 registrationDeadLine: new Date(registrationDeadLine),
                 eventDate: new Date(eventDate),
+                preferenceUpdateDeadLine: new Date(preferenceUpdateDeadLine),
+                preferenceUpdateStart: new Date(preferenceUpdateStart),
             },
         });
     } catch (error) {
