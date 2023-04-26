@@ -49,11 +49,11 @@ function Company() {
 	return (
 		<>
 			<Center>
-				<Heading size="md" m={5}>
+				<Heading size="lg" m={5}>
 					Company List
 				</Heading>
 			</Center>
-			<SimpleGrid columns={[3, 6, 6, 8]} m={3}>
+			<SimpleGrid columns={[3, 4, 4, 4]} m={3} spacingX={5}>
 				{companyCards}
 			</SimpleGrid>
 		</>

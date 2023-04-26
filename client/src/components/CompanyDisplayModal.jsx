@@ -33,7 +33,7 @@ function CompanyModal({
 	vacancies,
 }) {
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} size="xs">
+		<Modal isOpen={isOpen} onClose={onClose} size={["xs", "xs", "lg"]}>
 			<ModalOverlay />
 			<ModalContent w={{ sm: "90%" }}>
 				<ModalHeader size="xs">{title}</ModalHeader>

@@ -15,11 +15,20 @@ function CompanyDisplay({ name, img_url }) {
 
 	return (
 		<div>
-			<Card minW={115} minH={150}>
-				<CardBody>
+			<Card minW={115} minH={[170, 150, 180]}>
+				<CardBody onClick={onOpen} cursor="pointer">
 					<Stack align={"center"}>
-						<Avatar name={name} bg="tomato" src={img_url}></Avatar>
-						<Heading size="xs" onClick={onOpen} textAlign="center">
+						<Avatar
+							name={name}
+							bg="tomato"
+							src={img_url}
+							size={["lg", "md", "xl"]}
+						></Avatar>
+						<Heading
+							size={["xs", "xs", "sm"]}
+							textAlign="center"
+							cursor="pointer"
+						>
 							{name}
 						</Heading>
 					</Stack>
