@@ -63,11 +63,11 @@ function Navbar() {
             >
                 <Button
                     as={Link}
-                    to="/"
+                    to="/company"
                     variant="ghost"
                     mr={{ base: 0, md: 4 }}
                 >
-                    Home
+                    Companies
                 </Button>
                 <Button
                     as={Link}

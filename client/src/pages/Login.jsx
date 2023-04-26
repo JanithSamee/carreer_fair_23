@@ -89,6 +89,7 @@ function Login() {
                     <FormLabel>Email</FormLabel>
                     <Input
                         type="email"
+                        placeholder="example@email.com"
                         onChange={(e) =>
                             setformInputs({
                                 ...formInputs,
@@ -105,6 +106,7 @@ function Login() {
                 >
                     <FormLabel>Password</FormLabel>
                     <Input
+                        placeholder="Password"
                         type="password"
                         onChange={(e) =>
                             setformInputs({

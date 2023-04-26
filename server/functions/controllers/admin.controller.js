@@ -84,12 +84,14 @@ async function exportData(req, res) {
                 { id: "interviewsList", title: "interviewsList" },
                 { id: "interviewsQueue", title: "interviewsQueue" },
                 { id: "createdAt", title: "createdAt" },
+                { id: "timeStamp", title: "timeStamp" },
             ],
         });
 
         users.forEach((record) => {
             record.preferenceList = JSON.stringify(record.preferenceList);
             record.createdAt = new Date(record.createdAt.toDate());
+            record.timeStamp = record.createdAt.getTime();
         });
 
         csvWriter.writeRecords(users).then((csvFile) => {

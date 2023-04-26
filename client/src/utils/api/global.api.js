@@ -9,6 +9,14 @@ export async function getGlobalParams() {
         return formatError(error);
     }
 }
+export async function getGlobalParamsAsStudent() {
+    try {
+        const _res = await base_api.get("/global/get-as-student");
+        return _res.data;
+    } catch (error) {
+        return formatError(error);
+    }
+}
 export async function updateGlobalParams(formData) {
     try {
         console.log(formData);

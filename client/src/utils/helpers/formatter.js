@@ -57,4 +57,61 @@ function ISOtimestringLocalTimeString(_date) {
         return undefined;
     }
 }
-export { formatUserFromAuth, formatError, ISOtimestringLocalTimeString };
+
+function UTCStringToCommon(_date) {
+    try {
+        const date = new Date(_date);
+
+        const options = {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+        };
+
+        const formattedDate = date.toLocaleDateString("en-US", options);
+        return formattedDate;
+    } catch (error) {
+        return "";
+    }
+}
+
+function getTimeCounter(_date) {
+    try {
+        const futureDate = new Date(_date); // Example future date
+        const currentDate = new Date(); // Current date
+
+        const timeDiff = futureDate.getTime() - currentDate.getTime(); // Time difference in milliseconds
+        const seconds = Math.floor(timeDiff / 1000); // Convert milliseconds to seconds
+        const minutes = Math.floor(seconds / 60); // Convert seconds to minutes
+        const hours = Math.floor(minutes / 60); // Convert minutes to hours
+        const days = Math.floor(hours / 24); // Convert hours to days
+
+        let remainingTime = "";
+        if (days > 0) {
+            remainingTime = days + " days left";
+        } else if (hours > 0) {
+            remainingTime = hours + " hours left";
+        } else if (minutes > 0) {
+            remainingTime = minutes + " minutes left";
+        } else if (seconds > 0) {
+            remainingTime = seconds + " seconds left";
+        } else {
+            remainingTime = "Expired";
+        }
+
+        return remainingTime; // Output: "4 days left" (assuming current date is 27 April 2023)
+    } catch (error) {
+        return ""; // Output: "4 days left" (assuming current date is 27 April 2023)
+    }
+}
+
+export {
+    formatUserFromAuth,
+    formatError,
+    ISOtimestringLocalTimeString,
+    UTCStringToCommon,
+    getTimeCounter,
+};

@@ -14,6 +14,8 @@ async function signUp(req, res) {
     const { email, password, indexNumber, username } = req.body;
 
     try {
+        const currentDate = new Date();
+
         if (!email || !password || !indexNumber || !username) {
             return res.status(400).send({
                 error: true,

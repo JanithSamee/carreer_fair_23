@@ -126,6 +126,7 @@ function SignUp() {
                     <FormLabel>Email</FormLabel>
                     <Input
                         type="email"
+                        placeholder="example@email.com"
                         onChange={(e) =>
                             setformInputs({
                                 ...formInputs,
@@ -141,9 +142,10 @@ function SignUp() {
                     mb={4}
                     isInvalid={formError.error}
                 >
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Student Name</FormLabel>
                     <Input
                         type="text"
+                        placeholder="ABC Perera"
                         onChange={(e) =>
                             setformInputs({
                                 ...formInputs,
@@ -161,6 +163,7 @@ function SignUp() {
                     <FormLabel>Index Number</FormLabel>
                     <Input
                         type="text"
+                        placeholder="18XXXXX"
                         onChange={(e) =>
                             setformInputs({
                                 ...formInputs,
@@ -178,6 +181,7 @@ function SignUp() {
                     <FormLabel>Password</FormLabel>
                     <Input
                         type="password"
+                        placeholder="Minimum 6 characters"
                         onChange={(e) =>
                             setformInputs({
                                 ...formInputs,
@@ -195,6 +199,7 @@ function SignUp() {
                     <FormLabel>Confirm Password</FormLabel>
                     <Input
                         type="password"
+                        placeholder="Minimum 6 characters"
                         onChange={(e) =>
                             setformInputs({
                                 ...formInputs,

@@ -49,7 +49,7 @@ function SignUpConfirmModal(props) {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent m={1}>
+            <ModalContent m={2}>
                 <ModalHeader>Confirm your information</ModalHeader>
                 <ModalCloseButton onClick={onClose} />
                 <ModalBody>
