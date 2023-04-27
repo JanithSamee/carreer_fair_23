@@ -43,7 +43,11 @@ function Admin() {
             const url = window.URL.createObjectURL(new Blob([_res]));
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute("download", "file.csv");
+            const date = new Date();
+            link.setAttribute(
+                "download",
+                `student_data-${date.toLocaleString()}.csv`
+            );
             document.body.appendChild(link);
             link.click();
             toast({

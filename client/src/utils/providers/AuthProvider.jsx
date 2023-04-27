@@ -50,7 +50,7 @@ export function AuthProvider({ children }) {
         setloading(true);
         await auth.signOut();
         setloading(false);
-        sessionStorage.removeItem("token");
+        localStorage.removeItem("token");
         navigate("/");
     }
 
@@ -59,14 +59,16 @@ export function AuthProvider({ children }) {
         setinitialLoad(false);
 
         return auth.onAuthStateChanged((_user) => {
+            console.log("at provider begin");
             if (_user) {
+                console.log("at provider end");
                 const currentDate = new Date();
 
                 const _fUser = formatUserFromAuth(_user);
                 if (!_fUser.emailVerified) {
                     return navigate("/verify-email");
                 }
-                sessionStorage.setItem("token", _fUser.token);
+                localStorage.setItem("token", _fUser.token);
                 if (_fUser.tokenExp < currentDate.getTime()) {
                     return setuser({});
                 }
