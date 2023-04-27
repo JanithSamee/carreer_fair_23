@@ -50,25 +50,22 @@ export function AuthProvider({ children }) {
         setloading(true);
         await auth.signOut();
         setloading(false);
-        localStorage.removeItem("token");
+        window.localStorage.removeItem("token");
         navigate("/");
     }
 
     useEffect(() => {
-        //console.count("auth");
         setinitialLoad(false);
 
-        return auth.onAuthStateChanged((_user) => {
-            console.log("at provider begin");
+        auth.onAuthStateChanged((_user) => {
             if (_user) {
-                console.log("at provider end");
                 const currentDate = new Date();
 
                 const _fUser = formatUserFromAuth(_user);
                 if (!_fUser.emailVerified) {
                     return navigate("/verify-email");
                 }
-                localStorage.setItem("token", _fUser.token);
+                window.localStorage.setItem("token", _fUser.token);
                 if (_fUser.tokenExp < currentDate.getTime()) {
                     return setuser({});
                 }

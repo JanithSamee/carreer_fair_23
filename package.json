@@ -4,9 +4,9 @@
   "description": "## Student",
   "main": "index.js",
   "scripts": {
-    "dev-server": "cd server/functions && npm run serve",
+    "dev-server": "cd server/functions && firebase use dev && npm run serve",
     "dev-client": "cd client && npm run dev",
-    "deploy-server": "cd server/functions && npm run deploy",
+    "deploy-server": "cd server/functions && firebase use prod && npm run deploy",
     "deploy-client": "source .env && cd client && npm run build && sudo netlify deploy -d dist --prod"
   },
   "repository": {

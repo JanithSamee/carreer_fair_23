@@ -79,11 +79,11 @@ function Navbar() {
                 </Button>
                 <Button
                     as={Link}
-                    to="/signup"
+                    to="/student/dashboard"
                     variant="ghost"
                     mr={{ base: 0, md: 4 }}
                 >
-                    Sign Up
+                    Dashboard
                 </Button>
             </Box>
 

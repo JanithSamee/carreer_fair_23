@@ -18,9 +18,12 @@ import {
 function StudentEventsSection() {
     const toast = useToast();
     const [globalParams, setglobalParams] = useState({});
+    const [loading, setloading] = useState(false);
     useEffect(() => {
         async function getData() {
+            setloading(true);
             const _res = await getGlobalParamsAsStudent();
+            setloading(false);
             if (_res.error) {
                 toast({
                     title: "An error occurred.",
@@ -38,6 +41,13 @@ function StudentEventsSection() {
 
     return (
         <List spacing={3}>
+            {loading && (
+                <ListItem>
+                    <Text fontStyle={"italic"} color={"GrayText"}>
+                        Updating...
+                    </Text>
+                </ListItem>
+            )}
             {globalParams && globalParams.registrationDeadLine && (
                 <ListItem>
                     <ListIcon as={MdAccessTime} />
