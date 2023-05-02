@@ -51,6 +51,14 @@ class Admin {
             throw new Error({ message: "Error finding user." });
         }
     }
+    static async getUsers() {
+        const users = await adminsCollection.get();
+
+        let data = users.docs;
+
+        data = data.map((user) => new Admin(user.data()));
+        return data;
+    }
 }
 
 export default Admin;

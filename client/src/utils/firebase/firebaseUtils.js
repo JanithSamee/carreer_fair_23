@@ -11,7 +11,7 @@ const handleFileUpload = async (file, folder, fileName) => {
         const url = await getDownloadURL(storageRef);
         return { error: false, data: url };
     } catch (error) {
-        return formatError(error);
+        throw formatError(error);
     }
 };
 

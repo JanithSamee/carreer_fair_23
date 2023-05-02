@@ -20,7 +20,15 @@ function App() {
                 <Routes>
                     <Route path="/" Component={Login} />
                     <Route path="/signup" Component={SignUp} />
-                    <Route path="/company" Component={Company} />
+                    <Route
+                        path="/company"
+                        element={
+                            <>
+                                <Navbar></Navbar>
+                                <Company></Company>
+                            </>
+                        }
+                    />
                     <Route path="/student">
                         <Route
                             path="dashboard"
@@ -45,7 +53,15 @@ function App() {
                     <Route path="*" Component={NotFound} />
                     <Route path="/unauthorized" Component={Unauthorized} />
                     <Route path="/verify-email" Component={VerfyTheEmail} />
-                    <Route path="/about" Component={About} />
+                    <Route
+                        path="/about"
+                        element={
+                            <>
+                                <Navbar></Navbar>
+                                <About></About>
+                            </>
+                        }
+                    />
                 </Routes>
             </AuthProvider>
         </Router>

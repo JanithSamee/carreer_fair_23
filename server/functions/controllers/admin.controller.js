@@ -54,58 +54,15 @@ async function signUp(req, res) {
                     });
                 });
         } else {
-            res.status(401).send({ error: true, data: "Unautherenticated!" });
+            res.status(401).send({
+                error: true,
+                data: "Unautherenticated! Auth Token Invalid",
+            });
         }
-    } catch (error) {}
+    } catch (error) {
+        res.status(500).send({ error: true, data: formatError(error) });
+    }
 }
-
-// async function exportData(req, res) {
-//     try {
-//         const users = await Student.getUsersComplete();
-
-//         const __filename = fileURLToPath(import.meta.url);
-//         const __dirname = dirname(__filename);
-//         const filePath = path.join(__dirname, "output.csv");
-
-//         const csvWriter = createObjectCsvWriter({
-//             path: filePath,
-//             header: [
-//                 { id: "indexNumber", title: "indexNumber" },
-//                 { id: "email", title: "email" },
-//                 { id: "username", title: "username" },
-//                 { id: "firstName", title: "firstName" },
-//                 { id: "lastName", title: "lastName" },
-//                 { id: "cvURL", title: "cvURL" },
-//                 {
-//                     id: "preferenceCarrierChoise",
-//                     title: "preferenceCarrierChoise",
-//                 },
-//                 { id: "preferenceList", title: "preferenceList" },
-//                 { id: "interviewsList", title: "interviewsList" },
-//                 { id: "interviewsQueue", title: "interviewsQueue" },
-//                 { id: "createdAt", title: "createdAt" },
-//                 { id: "timeStamp", title: "timeStamp" },
-//             ],
-//         });
-
-//         users.forEach((record) => {
-//             record.preferenceList = JSON.stringify(record.preferenceList);
-//             record.createdAt = new Date(record.createdAt.toDate());
-//             record.timeStamp = record.createdAt.getTime();
-//         });
-
-//         csvWriter.writeRecords(users).then((csvFile) => {
-//             res.setHeader(
-//                 "Content-disposition",
-//                 "attachment; filename=output.csv"
-//             );
-//             res.set("Content-Type", "text/csv");
-//             res.status(200).sendFile(filePath);
-//         });
-//     } catch (error) {
-//         res.status(500).send({ error: true, data: formatError(error) });
-//     }
-// }
 
 async function exportData(req, res) {
     try {
@@ -158,4 +115,13 @@ async function exportData(req, res) {
     }
 }
 
-export { signUp, exportData };
+async function getAllAdmins(req, res) {
+    try {
+        const users = await Admin.getUsers();
+        res.json({ error: false, data: users });
+    } catch (error) {
+        res.status(500).send({ error: true, data: formatError(error) });
+    }
+}
+
+export { signUp, exportData, getAllAdmins };

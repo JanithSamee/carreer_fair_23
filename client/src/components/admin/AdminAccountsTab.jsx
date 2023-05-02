@@ -23,19 +23,34 @@ import {
     Th,
     Tbody,
     Td,
+    FormErrorMessage,
+    useToast,
+    Spinner,
 } from "@chakra-ui/react";
 import { AddCompanyModalForCoodinator } from "./AddCompanyModalForCoodinator";
 import useAuth from "../../utils/providers/AuthProvider";
+import { updatePassword } from "firebase/auth";
+import { auth } from "../../utils/firebase/firebaseConfig";
+import { useEffect } from "react";
+import { getAllAdmins } from "../../utils/api/admin.api";
+import AddAdminModal from "./AddAdminModal";
 
 const AdminAccountsTab = () => {
     const { logout, user } = useAuth();
+    const toast = useToast();
     const [loading, setloading] = useState(false);
+    const [loadingGet, setloadingGet] = useState(false);
+    const [formInputUpdatePW, setformInputUpdatePW] = useState("");
+    const [formErrorUpdatePW, setformErrorUpdatePW] = useState("");
+    const [users, setUsers] = useState([]);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleSubmitUpdatePW = async (event) => {
         event.preventDefault();
         setloading(true);
+        setformErrorUpdatePW("");
+
         if (
             formInputUpdatePW.newPassword !== formInputUpdatePW.confirmPassword
         ) {
@@ -46,7 +61,6 @@ const AdminAccountsTab = () => {
         if (
             !formInputUpdatePW.newPassword ||
             !formInputUpdatePW.confirmPassword
-            // !formInputUpdatePW.newPassword
         ) {
             setloading(false);
 
@@ -54,10 +68,6 @@ const AdminAccountsTab = () => {
         }
 
         try {
-            // Reauthenticate user with current password
-
-            // Update password
-            // console.log(formInputUpdatePW);
             await updatePassword(
                 auth.currentUser,
                 formInputUpdatePW.newPassword
@@ -83,24 +93,20 @@ const AdminAccountsTab = () => {
         }
     };
 
-    const [users, setUsers] = useState([
-        { id: 1, name: "User 1", companies: [] },
-        { id: 2, name: "User 2", companies: [] },
-        { id: 3, name: "User 3", companies: [] },
-        { id: 4, name: "User 3", companies: [] },
-        { id: 5, name: "User 3", companies: [] },
-    ]);
-    const [isAddingCompany, setIsAddingCompany] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
+    useEffect(() => {
+        async function getData() {
+            setloadingGet(true);
+            const res = await getAllAdmins();
+            setloadingGet(false);
+            if (res.error) {
+                //TODO: add toast
+                return;
+            }
+            setUsers(res.data);
+        }
+        getData();
+    }, []);
 
-    const handleAddCompany = (user, company) => {
-        const updatedUsers = users.map((u) =>
-            u.id === user.id
-                ? { ...u, companies: [...u.companies, company] }
-                : u
-        );
-        setUsers(updatedUsers);
-    };
     return (
         <Flex direction="column" align="center" justify="center">
             <Box w="md" bg="white" p={6} borderRadius="md" boxShadow="md">
@@ -135,30 +141,48 @@ const AdminAccountsTab = () => {
                     <ModalHeader>Change Password</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <FormControl mb={4}>
+                        {/* <FormControl mb={4}>
                             <FormLabel>Current Password</FormLabel>
                             <Input
                                 type="password"
                                 placeholder="Enter your current password"
                             />
-                        </FormControl>
+                        </FormControl> */}
                         <FormControl mb={4}>
                             <FormLabel>New Password</FormLabel>
                             <Input
                                 type="password"
                                 placeholder="Enter your new password"
+                                onChange={(e) =>
+                                    setformInputUpdatePW({
+                                        ...formInputUpdatePW,
+                                        confirmPassword: e.target.value,
+                                    })
+                                }
                             />
                         </FormControl>
-                        <FormControl mb={4}>
+                        <FormControl mb={4} isInvalid={formErrorUpdatePW}>
                             <FormLabel>Confirm New Password</FormLabel>
                             <Input
                                 type="password"
                                 placeholder="Confirm your new password"
+                                onChange={(e) =>
+                                    setformInputUpdatePW({
+                                        ...formInputUpdatePW,
+                                        newPassword: e.target.value,
+                                    })
+                                }
                             />
+                            {formErrorUpdatePW && (
+                                <FormErrorMessage>
+                                    {formErrorUpdatePW}
+                                </FormErrorMessage>
+                            )}
                         </FormControl>
                         <Button
                             onClick={handleSubmitUpdatePW}
                             colorScheme="green"
+                            isLoading={loading}
                         >
                             Save Changes
                         </Button>
@@ -176,26 +200,29 @@ const AdminAccountsTab = () => {
                 >
                     Admins
                 </Text>
-                <Button colorScheme="teal" m={5}>
-                    Add An Admin
-                </Button>
+                <AddAdminModal></AddAdminModal>
 
                 <Center>
                     <Table ml={4}>
                         <Thead>
                             <Tr>
                                 <Th></Th>
-                                <Th>Name</Th>
                                 <Th>Email</Th>
                                 <Th>Function</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
+                            {loadingGet && (
+                                <Tr>
+                                    <Td>
+                                        <Spinner></Spinner>
+                                    </Td>
+                                </Tr>
+                            )}
                             {users.map((user, index) => (
-                                <Tr key={user.id}>
+                                <Tr key={user.adminId}>
                                     <Td mr={1}>{index + 1}.</Td>
-                                    <Td>{user.name}</Td>
-                                    <Td>{"admin@gmail.com"}</Td>
+                                    <Td>{user && user.email}</Td>
 
                                     <Td>
                                         <Button colorScheme="orange">
@@ -207,15 +234,6 @@ const AdminAccountsTab = () => {
                         </Tbody>
                     </Table>
                 </Center>
-
-                {selectedUser && (
-                    <AddCompanyModalForCoodinator
-                        isOpen={isAddingCompany}
-                        onClose={() => setIsAddingCompany(false)}
-                        user={selectedUser}
-                        onSubmit={handleAddCompany}
-                    />
-                )}
             </Box>
         </Flex>
     );
