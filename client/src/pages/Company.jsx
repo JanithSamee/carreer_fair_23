@@ -1,4 +1,11 @@
-import { Box, Center, Heading, SimpleGrid, useToast } from "@chakra-ui/react";
+import {
+	Box,
+	Center,
+	Heading,
+	SimpleGrid,
+	Text,
+	useToast,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import CompanyDisplay from "../components/CompanyDisplay";
 import { getAllCompanies } from "../utils/api/company.api";
@@ -33,19 +40,21 @@ function Company() {
 				});
 			} else {
 				setData(_res.data);
-				//console.log(_res.data);
 			}
 		}
 		getData();
 	}, []);
+
 	const companyCards = data.map((company, idx) => (
 		<Box key={idx} mb={3}>
 			<CompanyDisplay
 				name={company.name}
 				img_url={company.profilePhoto}
+				companyId={company.companyId}
 			></CompanyDisplay>
 		</Box>
 	));
+
 	return (
 		<>
 			<Center>
@@ -53,9 +62,20 @@ function Company() {
 					Company List
 				</Heading>
 			</Center>
-			<SimpleGrid columns={[3, 4, 4, 4]} m={3} spacingX={5}>
-				{companyCards}
-			</SimpleGrid>
+			{data[0] === undefined ? (
+				<div>
+					<Center>
+						<Text>
+							We are currently in the process of finalizing the
+							list of companies
+						</Text>
+					</Center>
+				</div>
+			) : (
+				<SimpleGrid columns={[3, 4, 4, 4]} m={3} spacingX={5}>
+					{companyCards}
+				</SimpleGrid>
+			)}
 		</>
 	);
 }

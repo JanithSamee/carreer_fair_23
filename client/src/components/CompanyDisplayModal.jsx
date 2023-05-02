@@ -31,6 +31,7 @@ function CompanyModal({
 	companyDes,
 	email,
 	vacancies,
+	img_url,
 }) {
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} size={["xs", "xs", "lg"]}>
@@ -41,7 +42,11 @@ function CompanyModal({
 				<ModalBody>
 					<Center>
 						<Stack align="center">
-							<Avatar name={companyName} size="lg"></Avatar>
+							<Avatar
+								name={companyName}
+								size="lg"
+								src={img_url}
+							></Avatar>
 							<Text>{companyName}</Text>
 							<Text>{email}</Text>
 							<Text fontSize="xs">

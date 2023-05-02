@@ -5,13 +5,51 @@ import {
 	Stack,
 	Heading,
 	useDisclosure,
-	Input,
 } from "@chakra-ui/react";
-import CompanyModal from "./CompanyModal";
 import CompanyDisplayModal from "./CompanyDisplayModal";
+import { getCompany } from "../utils/api/company.api";
+import { useState, useEffect } from "react";
 
-function CompanyDisplay({ name, img_url }) {
+function CompanyDisplay({ companyId, name, img_url }) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [comData, setComData] = useState({
+		companyId: "",
+		email: "",
+		name: "",
+		maximumInterviews: "",
+		startTime: {
+			_nanoseconds: 0,
+			_seconds: 0,
+		},
+		endTime: {
+			_nanoseconds: 0,
+			_seconds: 0,
+		},
+		requirements: "",
+		interviewsList: [],
+		profilePhoto: "",
+		createdAt: {
+			_seconds: 0,
+			_nanoseconds: 0,
+		},
+	});
+	//console.log(isOpen);
+	useEffect(() => {
+		async function getComData() {
+			if (isOpen) {
+				const _res = await getCompany(companyId);
+				if (_res != undefined) {
+					if (_res.error == true) {
+						console.log(_res.error);
+						//TODO:add toast
+					} else {
+						setComData(_res.data);
+					}
+				}
+			}
+		}
+		getComData();
+	}, [isOpen]);
 
 	return (
 		<div>
@@ -20,8 +58,7 @@ function CompanyDisplay({ name, img_url }) {
 					<Stack align={"center"}>
 						<Avatar
 							name={name}
-							bg="tomato"
-							src={img_url}
+							src={comData.profilePhoto}
 							size={["lg", "md", "xl"]}
 						></Avatar>
 						<Heading
@@ -34,16 +71,16 @@ function CompanyDisplay({ name, img_url }) {
 					</Stack>
 				</CardBody>
 			</Card>
+
 			<CompanyDisplayModal
 				isOpen={isOpen}
 				onClose={onClose}
 				title={name}
 				companyName={name}
-				companyDes={
-					"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. "
-				}
-				email={"careers@wso2.com"}
-				vacancies={5}
+				companyDes={comData.requirements}
+				email={comData.email}
+				vacancies={comData.maximumInterviews}
+				img_url={comData.profilePhoto}
 			></CompanyDisplayModal>
 		</div>
 	);
