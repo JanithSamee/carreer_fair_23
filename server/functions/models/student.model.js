@@ -12,6 +12,7 @@ class Student {
         this.firstName = data.firstName || "";
         this.lastName = data.lastName || "";
         this.cvURL = data.cvURL || "";
+        this.CVCategory = data.CVCategory || { CS: "", EE: "", MN: "" };
         this.preferenceCarrierChoise = data.preferenceCarrierChoise || [];
         this.preferenceList = data.preferenceList || [];
         this.interviewsList = data.interviewsList || [];
@@ -31,6 +32,7 @@ class Student {
                 firstName: this.firstName,
                 lastName: this.lastName,
                 cvURL: this.cvURL,
+                CVCategory: this.CVCategory,
                 preferenceCarrierChoise: this.preferenceCarrierChoise,
                 preferenceList: this.preferenceList,
                 interviewsList: this.interviewsList,
@@ -51,6 +53,8 @@ class Student {
             firstName: this.firstName,
             lastName: this.lastName,
             cvURL: this.cvURL,
+            CVCategory: this.CVCategory,
+
             preferenceCarrierChoise: this.preferenceCarrierChoise,
             preferenceList: this.preferenceList,
             interviewsList: this.interviewsList,

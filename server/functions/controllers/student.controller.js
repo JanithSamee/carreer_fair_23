@@ -284,10 +284,19 @@ async function updateProfilePicture(req, res) {
 }
 async function uploadCV(req, res) {
     const indexNumber = req.user.uid;
-    const { cvURL } = req.body;
+    const { cvURL, CVCategory } = req.body;
 
     try {
-        if (cvURL) {
+        if (cvURL || CVCategory) {
+            if (CVCategory) {
+                await Student.updateById(indexNumber, {
+                    CVCategory: CVCategory,
+                });
+                return res.status(200).send({
+                    error: false,
+                    message: "Files uploaded successfully",
+                });
+            }
             await Student.updateById(indexNumber, {
                 cvURL: cvURL,
             });

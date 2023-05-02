@@ -2,90 +2,105 @@ import { formatError } from "../helpers/formatter";
 import base_api from "./_base.api";
 
 export async function signUpStudent(formData) {
-	try {
-		const _res = await base_api.post("/student/sign-up", formData);
-		return _res.data;
-	} catch (error) {
-		return (
-			(error.response && error.response.data) || {
-				error: true,
-				data: error.message || "Uknown Error!",
-			}
-		);
-	}
+    try {
+        const _res = await base_api.post("/student/sign-up", formData);
+        return _res.data;
+    } catch (error) {
+        return (
+            (error.response && error.response.data) || {
+                error: true,
+                data: error.message || "Uknown Error!",
+            }
+        );
+    }
 }
 export async function updateStudent(formData) {
-	try {
-		const _res = await base_api.post("/student/update", formData);
-		return _res.data;
-	} catch (error) {
-		return (
-			(error.response && error.response.data) || {
-				error: true,
-				data: error.message || "Uknown Error!",
-			}
-		);
-	}
+    try {
+        const _res = await base_api.post("/student/update", formData);
+        return _res.data;
+    } catch (error) {
+        return (
+            (error.response && error.response.data) || {
+                error: true,
+                data: error.message || "Uknown Error!",
+            }
+        );
+    }
 }
 export async function getStudent() {
-	try {
-		const _res = await base_api.get("/student/single");
-		return _res.data;
-	} catch (error) {
-		return (
-			(error.response && error.response.data) || {
-				error: true,
-				data: error.message || "Uknown Error!",
-			}
-		);
-	}
+    try {
+        const _res = await base_api.get("/student/single");
+        return _res.data;
+    } catch (error) {
+        return (
+            (error.response && error.response.data) || {
+                error: true,
+                data: error.message || "Uknown Error!",
+            }
+        );
+    }
 }
 export async function updateStudentProfilePicture(imageUrl) {
-	try {
-		const _res = await base_api.post("/student/update-profile-picture", {
-			profilePhoto: imageUrl,
-		});
-		return _res.data;
-	} catch (error) {
-		return (
-			(error.response && error.response.data) || {
-				error: true,
-				data: error.message || "Uknown Error!",
-			}
-		);
-	}
+    try {
+        const _res = await base_api.post("/student/update-profile-picture", {
+            profilePhoto: imageUrl,
+        });
+        return _res.data;
+    } catch (error) {
+        return (
+            (error.response && error.response.data) || {
+                error: true,
+                data: error.message || "Uknown Error!",
+            }
+        );
+    }
 }
 export async function updateStudentCV(cvURL) {
-	try {
-		const _res = await base_api.post("/student/update-cv", {
-			cvURL: cvURL,
-		});
-		return _res.data;
-	} catch (error) {
-		return (
-			(error.response && error.response.data) || {
-				error: true,
-				data: error.message || "Uknown Error!",
-			}
-		);
-	}
+    try {
+        const _res = await base_api.post("/student/update-cv", {
+            cvURL: cvURL,
+        });
+        return _res.data;
+    } catch (error) {
+        return (
+            (error.response && error.response.data) || {
+                error: true,
+                data: error.message || "Uknown Error!",
+            }
+        );
+    }
+}
+export async function updateStudentCVAsCategory(CVCategory) {
+    try {
+        const _res = await base_api.post("/student/update-cv", {
+            CVCategory: CVCategory,
+        });
+        return _res.data;
+    } catch (error) {
+        return (
+            (error.response && error.response.data) || {
+                error: true,
+                data: error.message || "Uknown Error!",
+            }
+        );
+    }
 }
 export async function updateStudentpreferences(formData) {
-	try {
-		const _res = await base_api.post(
-			"/student/update-preferences",
-			formData
-		);
-		return _res.data;
-	} catch (error) {
-		return formatError(error);
-	}
+    try {
+        const _res = await base_api.post(
+            "/student/update-preferences",
+            formData
+        );
+        return _res.data;
+    } catch (error) {
+        return formatError(error);
+    }
 }
 export async function getAllStudents() {
-	try {
-		const _res = await base_api.get("/student/all");
-		return _res.data;
-	} catch (error) {
-		return formatError(error);
-	}
+    try {
+        const _res = await base_api.get("/student/all");
+        return _res.data;
+    } catch (error) {
+        return formatError(error);
+    }
 }
