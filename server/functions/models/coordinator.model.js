@@ -8,6 +8,8 @@ class Coordinator {
     constructor(data) {
         this.coordinatorId = data.coordinatorId;
         this.email = data.email;
+        this.name = data.name;
+        this.phone = data.phone;
         this.companies = data.companies || [];
         this.createdAt = data.createdAt || new Date();
     }
@@ -19,6 +21,8 @@ class Coordinator {
             await userRef.set({
                 coordinatorId: this.coordinatorId,
                 email: this.email,
+                name: this.name,
+                phone: this.phone,
                 companies: this.companies,
                 createdAt: this.createdAt,
             });
@@ -32,6 +36,8 @@ class Coordinator {
         return {
             adminId: this.adminId,
             email: this.email,
+            phone: this.phone,
+            name: this.name,
             accessLevel: this.accessLevel,
             createdAt: this.createdAt,
         };
@@ -68,11 +74,11 @@ class Coordinator {
         }
     }
     static async getUsers() {
-        const users = await coordinatorCollection.select().get();
+        const users = await coordinatorCollection.get();
 
         let data = users.docs;
 
-        data = data.map((user) => new Student(user.data()));
+        data = data.map((user) => new Coordinator(user.data()));
         return data;
     }
 }
