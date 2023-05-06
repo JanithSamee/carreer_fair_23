@@ -55,20 +55,6 @@ function StudentCard({
                             interviewsList={interviewsList}
                         ></StudentModalContent>
                     </ModalBody>
-
-                    <ModalFooter>
-                        <Button
-                            colorScheme="red"
-                            mr={3}
-                            onClick={onClose}
-                            size="xs"
-                        >
-                            Close
-                        </Button>
-                        <Button size="xs" colorScheme="green">
-                            Save
-                        </Button>
-                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </div>

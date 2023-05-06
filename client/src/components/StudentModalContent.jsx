@@ -12,11 +12,14 @@ function StudentModalContent({
     interviewsList,
 }) {
     const toast = useToast();
+    const [isLoading, setisLoading] = useState(false);
     const [studentData, setstudentData] = useState({});
 
     useEffect(() => {
         async function getData() {
+            setisLoading(true);
             const _res = await getStudent(index_number);
+            setisLoading(false);
             // console.log(_res);
             if (_res && !_res.error) {
                 setstudentData(_res.data);
@@ -39,9 +42,18 @@ function StudentModalContent({
                 <Text>{index_number}</Text>
                 <Text>{name_initial}</Text>
                 <CompanyList
+                    type="pref"
+                    isLoading={isLoading}
                     companyList={studentData.preferenceList}
                 ></CompanyList>
-                <AddPrefComp interviewsList={interviewsList}></AddPrefComp>
+                <CompanyList
+                    isLoading={isLoading}
+                    companyList={studentData.interviewsList}
+                ></CompanyList>
+                <AddPrefComp
+                    index_number={index_number}
+                    interviewsList={studentData.interviewsList}
+                ></AddPrefComp>
             </Stack>
         </div>
     );
