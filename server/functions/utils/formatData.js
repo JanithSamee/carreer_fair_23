@@ -32,9 +32,23 @@ function formatCompaniesQueueAsRef(companies) {
     }));
 }
 
+function getCompanyName(CName) {
+    const names = CName.split("-");
+    if (names.length > 1) {
+        return names.slice(1, names.length).join(" ");
+    } else {
+        return names[0];
+    }
+}
+
+function formatPreference(preferences) {
+    return preferences.map((item) => getCompanyName(item.name));
+}
+
 export {
     formatError,
     validateIndex,
     formatCompaniesAsRef,
     formatCompaniesQueueAsRef,
+    formatPreference,
 };
