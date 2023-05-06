@@ -23,6 +23,13 @@ function formatCompaniesAsRef(companies) {
         name: element,
     }));
 }
+function formatCompaniesAsRefV2(companies) {
+    return companies.map((element) => ({
+        ref: db.collection("companies").doc(element.name),
+        name: element.name,
+        time: element.time,
+    }));
+}
 function formatCompaniesQueueAsRef(companies) {
     // statust = "assigned" | "ongoing" | "completed"
     return companies.map((element) => ({
@@ -32,9 +39,24 @@ function formatCompaniesQueueAsRef(companies) {
     }));
 }
 
+function getCompanyName(CName) {
+    const names = CName.split("-");
+    if (names.length > 1) {
+        return names.slice(1, names.length).join(" ");
+    } else {
+        return names[0];
+    }
+}
+
+function formatPreference(preferences) {
+    return preferences.map((item) => getCompanyName(item.name));
+}
+
 export {
     formatError,
     validateIndex,
     formatCompaniesAsRef,
     formatCompaniesQueueAsRef,
+    formatPreference,
+    formatCompaniesAsRefV2,
 };

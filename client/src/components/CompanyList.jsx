@@ -9,17 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { getCompanyName } from "../utils/helpers/formatter";
 
-function CompanyList({ companyList }) {
-    const company_data = [
-        { com_name: "WSO2", logo_url: "logo" },
-        { com_name: "LSEG", logo_url: "logo" },
-        { com_name: "CEB", logo_url: "logo" },
-        { com_name: "RMA", logo_url: "logo" },
-        { com_name: "99X", logo_url: "logo" },
-        { com_name: "Wind Force", logo_url: "logo" },
-    ];
-    // const companyName =company && company.name && company.name.split("-")
-
+function CompanyList({ companyList, type, isLoading }) {
     const listComponent = companyList ? (
         companyList.map((company, idx) => (
             <GridItem align="center" key={idx}>
@@ -55,11 +45,21 @@ function CompanyList({ companyList }) {
     );
     return (
         <div>
-            <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-                {listComponent}
-            </Grid>
-            <Divider mt={5} />
-            <Text fontSize={12}>Final Preferences List</Text>
+            {isLoading ? (
+                <Text fontSize={"small"} color={"GrayText"}>
+                    Updating...
+                </Text>
+            ) : (
+                <>
+                    <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+                        {listComponent}
+                    </Grid>
+                    <Divider mt={5} />
+                </>
+            )}
+            <Text fontSize={12}>
+                {type === "pref" ? "Preferences List" : "Final Selected List"}
+            </Text>
         </div>
     );
 }

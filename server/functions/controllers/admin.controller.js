@@ -2,7 +2,7 @@ import { auth } from "../db/exporter.js";
 import Admin from "../models/admin.model.js";
 import Student from "../models/student.model.js";
 import { generateToken } from "../utils/authHelper.js";
-import { formatError } from "../utils/formatData.js";
+import { formatError, formatPreference } from "../utils/formatData.js";
 import { createObjectCsvStringifier } from "csv-writer";
 // import path, { dirname } from "path";
 // import { fileURLToPath } from "url";
@@ -76,13 +76,9 @@ async function exportData(req, res) {
                 { id: "firstName", title: "firstName" },
                 { id: "lastName", title: "lastName" },
                 { id: "cvURL", title: "cvURL" },
-                {
-                    id: "preferenceCarrierChoise",
-                    title: "preferenceCarrierChoise",
-                },
+
                 { id: "preferenceList", title: "preferenceList" },
                 { id: "interviewsList", title: "interviewsList" },
-                { id: "interviewsQueue", title: "interviewsQueue" },
                 { id: "createdAt", title: "createdAt" },
                 { id: "timeStamp", title: "timeStamp" },
             ],
@@ -96,16 +92,19 @@ async function exportData(req, res) {
                 firstName: record.firstName,
                 lastName: record.lastName,
                 cvURL: record.cvURL,
-                preferenceCarrierChoise: record.preferenceCarrierChoise,
-                preferenceList: JSON.stringify(record.preferenceList),
-                interviewsList: record.interviewsList,
-                interviewsQueue: record.interviewsQueue,
-                createdAt: new Date(record.createdAt.toDate()),
-                timeStamp: new Date(record.createdAt.toDate()).getTime(),
+                preferenceList: JSON.stringify(
+                    formatPreference(record.preferenceList)
+                ),
+                interviewsList: JSON.stringify(
+                    formatPreference(record.interviewsList)
+                ),
+                createdAt: record.createdAt.toDate(),
+                timeStamp: record.createdAt.toMillis(),
             };
         });
 
-        const csvString = csvWriter.stringifyRecords(records);
+        const csvString =
+            csvWriter.getHeaderString() + csvWriter.stringifyRecords(records);
 
         res.setHeader("Content-disposition", "attachment; filename=output.csv");
         res.set("Content-Type", "text/csv");
