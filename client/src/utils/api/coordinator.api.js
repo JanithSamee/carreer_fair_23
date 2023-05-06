@@ -14,6 +14,17 @@ export async function addCoordinator({ email, password, phone, name }) {
         return formatError(error);
     }
 }
+export async function assignCompaniesForCoordinators(formatData) {
+    try {
+        const _res = await base_api.post(
+            "/coordinator/update-assign",
+            formatData
+        );
+        return _res.data;
+    } catch (error) {
+        return formatError(error);
+    }
+}
 export async function getCoordinators() {
     try {
         const _res = await base_api.get("/coordinator/get/all");

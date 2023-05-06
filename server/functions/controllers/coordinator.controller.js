@@ -1,4 +1,4 @@
-import { auth } from "../db/exporter.js";
+import { auth, db } from "../db/exporter.js";
 import Coordinator from "../models/coordinator.model.js";
 import Student from "../models/student.model.js";
 import { generateToken } from "../utils/authHelper.js";
@@ -69,10 +69,14 @@ async function assignCompanies(req, res) {
     try {
         const { companies, coordinatorId } = req.body;
 
-        const companiesRef = companies.map((element) =>
-            db.collection("companies").doc(element)
-        );
-        await Coordinator.updateById(coordinatorId, { companiesRef });
+        const companiesRef = companies.map((element) => ({
+            ref: db.collection("companies").doc(element.companyId),
+            name: element.name,
+            companyId: element.companyId,
+        }));
+        await Coordinator.updateById(coordinatorId, {
+            companies: companiesRef,
+        });
         return res.status(200).send({ error: false, data: companiesRef });
     } catch (error) {
         res.status(500).send({ error: true, data: formatError(error) });

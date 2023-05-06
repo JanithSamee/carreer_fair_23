@@ -8,6 +8,8 @@ import {
     FormLabel,
     Input,
     Table,
+    Tag,
+    TagLabel,
     Tbody,
     Td,
     Text,
@@ -73,14 +75,7 @@ const AdminManagement = () => {
         });
     }
 
-    const handleAddCompany = (user, company) => {
-        const updatedUsers = users.map((u) =>
-            u.id === user.id
-                ? { ...u, companies: [...u.companies, company] }
-                : u
-        );
-        setUsers(updatedUsers);
-    };
+    const handleAddCompany = (user, company) => {};
 
     useEffect(() => {
         async function getData() {
@@ -242,9 +237,9 @@ const AdminManagement = () => {
 
                                 <Td>{user && user.phone}</Td>
                                 <Td>
-                                    {user.companies.map((company) => (
+                                    {/* {user.companies.map((company) => (
                                         <Text key={company}>{company}</Text>
-                                    ))}
+                                    ))} */}
                                     <Button
                                         size="sm"
                                         colorScheme="facebook"
@@ -258,21 +253,29 @@ const AdminManagement = () => {
                                     </Button>
                                 </Td>
                                 <Td>
-                                    <Avatar
-                                        name="ajs s"
-                                        size={"sm"}
-                                        m={2}
-                                    ></Avatar>
-                                    <Avatar
-                                        name="ajs s"
-                                        size={"sm"}
-                                        m={2}
-                                    ></Avatar>
-                                    <Avatar
-                                        name="ajs s"
-                                        size={"sm"}
-                                        m={2}
-                                    ></Avatar>
+                                    {user.companies.map((company, index) => (
+                                        <Tag
+                                            key={
+                                                (company &&
+                                                    company.companyId) ||
+                                                index
+                                            }
+                                            size="lg"
+                                            variant="outline"
+                                            m={1}
+                                            p={1}
+                                            // boxShadow={"sm"}
+                                        >
+                                            <Avatar
+                                                size="sm"
+                                                name={company && company.name}
+                                                m={2}
+                                            />
+                                            <TagLabel>
+                                                {company && company.name}
+                                            </TagLabel>
+                                        </Tag>
+                                    ))}
                                 </Td>
                                 <Td>
                                     <Button colorScheme="orange">
@@ -296,7 +299,8 @@ const AdminManagement = () => {
                     isOpen={isAddingCompany}
                     onClose={() => setIsAddingCompany(false)}
                     user={selectedUser}
-                    onSubmit={handleAddCompany}
+                    onChange={setisListChanged}
+                    // onSubmit={handleAddCompany}
                 />
             )}
         </Box>
