@@ -27,9 +27,12 @@ export async function updateStudent(formData) {
         );
     }
 }
-export async function getStudent() {
+export async function getStudent(indexNumber) {
     try {
-        const _res = await base_api.get("/student/single");
+        const _url = indexNumber
+            ? "/student/single?indexNumber=" + indexNumber
+            : "/student/single";
+        const _res = await base_api.get(_url);
         return _res.data;
     } catch (error) {
         return (

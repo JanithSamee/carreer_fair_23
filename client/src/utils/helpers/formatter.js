@@ -108,10 +108,20 @@ function getTimeCounter(_date) {
     }
 }
 
+function getCompanyName(CName) {
+    const names = CName.split("-");
+    if (names.length > 1) {
+        return names.slice(1, names.length).join(" ");
+    } else {
+        return names[0];
+    }
+}
+
 export {
     formatUserFromAuth,
     formatError,
     ISOtimestringLocalTimeString,
     UTCStringToCommon,
     getTimeCounter,
+    getCompanyName,
 };
