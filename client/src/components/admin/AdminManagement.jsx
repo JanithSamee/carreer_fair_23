@@ -22,6 +22,8 @@ import {
     updateGlobalParams,
 } from "../../utils/api/global.api";
 import { ISOtimestringLocalTimeString } from "../../utils/helpers/formatter";
+import AddCoordinatorModal from "./AddCoodinatorModal";
+import { getCoordinators } from "../../utils/api/coordinator.api";
 
 const AdminManagement = () => {
     const [eventDate, seteventDate] = useState("");
@@ -106,6 +108,29 @@ const AdminManagement = () => {
         }
         getData();
     }, []);
+    const [isListChanged, setisListChanged] = useState(false);
+    const [coordinatorsList, setcoordinatorsList] = useState([]);
+    const [coordinatorsListLoading, setcoordinatorsListLoading] =
+        useState(false);
+    useEffect(() => {
+        async function getData() {
+            setcoordinatorsListLoading(true);
+            const _res = await getCoordinators();
+            setcoordinatorsListLoading(false);
+            if (_res.error) {
+                toast({
+                    title: "An error occurred.",
+                    description: _res.data,
+                    status: "error",
+                    duration: 9000,
+                    isClosable: true,
+                });
+                return;
+            }
+            Array.isArray(_res.data) && setcoordinatorsList(_res.data);
+        }
+        getData();
+    }, [isListChanged]);
 
     return (
         <Box>
@@ -190,9 +215,9 @@ const AdminManagement = () => {
             >
                 Coordinators
             </Text>
-            <Button colorScheme="teal" m={5}>
-                Add A Coordinator
-            </Button>
+            <AddCoordinatorModal
+                isChanged={setisListChanged}
+            ></AddCoordinatorModal>
 
             <Table ml={4}>
                 <Thead>
@@ -205,42 +230,64 @@ const AdminManagement = () => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {users.map((user) => (
-                        <Tr key={user.id}>
-                            <Td>
-                                {user.name + "\n "} <br />
-                                <span style={{ color: "grey" }}>
-                                    coordinator@gmail.com
-                                </span>
-                            </Td>
+                    {!coordinatorsListLoading ? (
+                        coordinatorsList.map((user, index) => (
+                            <Tr key={index}>
+                                <Td>
+                                    {user.name + "\n "} <br />
+                                    <span style={{ color: "grey" }}>
+                                        {user && user.coordinatorId}
+                                    </span>
+                                </Td>
 
-                            <Td>{"+94768898978"}</Td>
+                                <Td>{user && user.phone}</Td>
+                                <Td>
+                                    {user.companies.map((company) => (
+                                        <Text key={company}>{company}</Text>
+                                    ))}
+                                    <Button
+                                        size="sm"
+                                        colorScheme="facebook"
+                                        ml={2}
+                                        onClick={() => {
+                                            setSelectedUser(user);
+                                            setIsAddingCompany(true);
+                                        }}
+                                    >
+                                        Add Company
+                                    </Button>
+                                </Td>
+                                <Td>
+                                    <Avatar
+                                        name="ajs s"
+                                        size={"sm"}
+                                        m={2}
+                                    ></Avatar>
+                                    <Avatar
+                                        name="ajs s"
+                                        size={"sm"}
+                                        m={2}
+                                    ></Avatar>
+                                    <Avatar
+                                        name="ajs s"
+                                        size={"sm"}
+                                        m={2}
+                                    ></Avatar>
+                                </Td>
+                                <Td>
+                                    <Button colorScheme="orange">
+                                        Disable
+                                    </Button>
+                                </Td>
+                            </Tr>
+                        ))
+                    ) : (
+                        <Tr>
                             <Td>
-                                {user.companies.map((company) => (
-                                    <Text key={company}>{company}</Text>
-                                ))}
-                                <Button
-                                    size="sm"
-                                    colorScheme="facebook"
-                                    ml={2}
-                                    onClick={() => {
-                                        setSelectedUser(user);
-                                        setIsAddingCompany(true);
-                                    }}
-                                >
-                                    Add Company
-                                </Button>
-                            </Td>
-                            <Td>
-                                <Avatar name="ajs s" size={"sm"} m={2}></Avatar>
-                                <Avatar name="ajs s" size={"sm"} m={2}></Avatar>
-                                <Avatar name="ajs s" size={"sm"} m={2}></Avatar>
-                            </Td>
-                            <Td>
-                                <Button colorScheme="orange">Disable</Button>
+                                <Text>Updating....</Text>
                             </Td>
                         </Tr>
-                    ))}
+                    )}
                 </Tbody>
             </Table>
 
