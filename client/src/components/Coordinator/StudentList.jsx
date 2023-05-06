@@ -1,53 +1,51 @@
-import { Box, Button, Switch } from "@chakra-ui/react";
+import { Box, Button, IconButton, Switch } from "@chakra-ui/react";
 import { useState } from "react";
+import { TiTick } from "react-icons/ti";
+import { FaArrowRight } from "react-icons/fa";
 
-function StudentList({ onClose }) {
-	const [checkedStudents, setCheckedStudents] = useState([
-		"Student 1",
-		"Student 3",
+function StudentList({ onClose, setOngoing, ongoing, completedList }) {
+	const [assignedStudentList, setAssignedStudentList] = useState([
+		"180123V",
+		"180147N",
 	]);
 
-	const handleStudentCheck = (studentName) => {
-		if (checkedStudents.includes(studentName)) {
-			setCheckedStudents((prevCheckedStudents) =>
-				prevCheckedStudents.filter((name) => name !== studentName)
-			);
-		} else {
-			setCheckedStudents((prevCheckedStudents) => [
-				...prevCheckedStudents,
-				studentName,
-			]);
-		}
+	const handleSubmit = () => {
+		//console.log(completedList);
+		onClose();
 	};
 
-	const handleSubmit = () => {
-		console.log(checkedStudents);
-		onClose();
+	const handleAssign = (student) => {
+		if (ongoing === null) {
+			setOngoing(student);
+			setAssignedStudentList((prev) =>
+				prev.filter((item) => item !== student)
+			);
+		}
+
+		//console.log(student);
 	};
 
 	return (
 		<>
-			{[...Array(10)].map((_, index) => (
+			{assignedStudentList.map((student, index) => (
 				<Box key={index} mt={3} display="flex" alignItems="center">
-					<Switch
-						id={`student-${index}`}
-						name={`student-${index}`}
-						size={["sm", "md", "md"]}
-						onChange={(e) => handleStudentCheck(e.target.value)}
-						isChecked={checkedStudents.includes(
-							`Student ${index + 1}`
-						)}
-						value={`Student ${index + 1}`}
-					/>
-					<label
-						htmlFor={`student-${index}`}
-						style={{ marginLeft: "10px" }}
-					>
-						Student {index + 1}
+					<label htmlFor={index} style={{ marginLeft: "10px" }}>
+						{student}
 					</label>
+					<IconButton
+						icon={<FaArrowRight />}
+						aria-label="Tick"
+						colorScheme="red"
+						size="xs"
+						ml={2}
+						variant="outline"
+						borderRadius={100}
+						alignSelf="center"
+						onClick={() => handleAssign(student)}
+					/>
 				</Box>
 			))}
-			<Box display="flex" justifyContent="flex-end">
+			{/* <Box display="flex" justifyContent="flex-end">
 				<Button
 					size="sm"
 					bg="blue.300"
@@ -57,7 +55,7 @@ function StudentList({ onClose }) {
 				>
 					Done
 				</Button>
-			</Box>
+			</Box> */}
 		</>
 	);
 }

@@ -14,9 +14,13 @@ import {
 	ModalCloseButton,
 	Text,
 	useBreakpointValue,
+	Flex,
+	IconButton,
+	Divider,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import StudentList from "../../components/Coordinator/StudentList";
+import { TiTick } from "react-icons/ti";
 
 function CoDashboard() {
 	const logout = () => {
@@ -24,6 +28,8 @@ function CoDashboard() {
 	};
 
 	const [selectedCompany, setSelectedCompany] = useState(null);
+	const [ongoing, setOngoing] = useState(null);
+	const [completedList, setCompletedList] = useState([]);
 
 	const fontSize = useBreakpointValue({ base: "lg", sm: "md", lg: "xl" });
 
@@ -33,6 +39,11 @@ function CoDashboard() {
 
 	const handleModalClose = () => {
 		setSelectedCompany(null);
+	};
+
+	const handleComplete = (student) => {
+		setCompletedList((pre) => [...pre, student]);
+		setOngoing(null);
 	};
 
 	return (
@@ -122,12 +133,48 @@ function CoDashboard() {
 						<ModalHeader>{selectedCompany}</ModalHeader>
 						<ModalCloseButton />
 						<ModalBody>
-							<Text fontSize={["sm", "md", "md"]}>
-								Student List of {selectedCompany}.
-							</Text>
-							<StudentList
-								onClose={handleModalClose}
-							></StudentList>
+							<Flex justifyContent="space-between">
+								<Box>
+									<Text
+										fontSize={["sm", "md", "md"]}
+										fontWeight={500}
+									>
+										Assigned Students
+									</Text>
+									<StudentList
+										onClose={handleModalClose}
+										setOngoing={setOngoing}
+										ongoing={ongoing}
+										completedList={completedList}
+									/>
+								</Box>
+								<Box>
+									<Text fontWeight={500}>
+										Ongoing interview
+									</Text>
+									<Text fontSize="md" mt={2}>
+										{ongoing}
+										<IconButton
+											icon={<TiTick />}
+											aria-label="Tick"
+											colorScheme="green"
+											size="xs"
+											ml={2}
+											variant="outline"
+											borderRadius={100}
+											alignSelf="center"
+											onClick={() =>
+												handleComplete(ongoing)
+											}
+										/>
+									</Text>
+									<Divider my={5}></Divider>
+									<Text fontWeight={500}>Completed</Text>
+									{completedList.map((student, idx) => (
+										<Text key={idx}>{student}</Text>
+									))}
+								</Box>
+							</Flex>
 						</ModalBody>
 					</ModalContent>
 				</Modal>
