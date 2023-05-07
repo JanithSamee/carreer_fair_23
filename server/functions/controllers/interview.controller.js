@@ -73,7 +73,9 @@ async function updateInterviewsQueue(req, res) {
                 data: "Invalid Data!",
             });
         }
-        const interview = await Interview.updateById(interviewId, { status });
+        const interview = await Interview.updateById(interviewId, {
+            interviewsStatus: status,
+        });
 
         if (!interview) {
             res.status(400).send({ error: true, data: "Interview Not found" });

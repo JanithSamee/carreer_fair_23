@@ -227,6 +227,16 @@ async function getUsers(req, res) {
         res.status(500).send({ error: true, data: formatError(error) });
     }
 }
+async function getCvs(req, res) {
+    try {
+        const indexNumber = req.query.indexNumber;
+        const users = await Student.findById(indexNumber);
+        const { cvURL, CVCategory, ...rest } = users;
+        res.json({ error: false, data: { cvURL, CVCategory, indexNumber } });
+    } catch (error) {
+        res.status(500).send({ error: true, data: formatError(error) });
+    }
+}
 async function getUser(req, res) {
     try {
         let indexNumber = "";
@@ -323,4 +333,5 @@ export {
     updateInterviewsQueue,
     updateProfilePicture,
     uploadCV,
+    getCvs,
 };

@@ -103,6 +103,14 @@ class Student {
         }
         return null;
     }
+    // static async getUserCVs(indexNumber) {
+    //     const users = await usersCollection.doc(indexNumber).get();
+
+    //     let data = users.docs;
+
+    //     data = data.map((user) => new Student(user.data()));
+    //     return data;
+    // }
     static async getUsers() {
         const users = await usersCollection
             .select("firstName", "lastName", "indexNumber", "profilePhoto")

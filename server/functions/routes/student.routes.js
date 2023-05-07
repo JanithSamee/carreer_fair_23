@@ -1,6 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 import {
+    getCvs,
     getUser,
     getUsers,
     signUp,
@@ -13,6 +14,7 @@ import {
 } from "../controllers/student.controller.js";
 import autherenticateAdmin from "../middleware/admin.middleware.js";
 import autherenticateStudent from "../middleware/student.middleware.js";
+import autherenticateCoordinator from "../middleware/coordinator.middleware.js";
 const studentRouter = Router();
 
 const storage = multer.memoryStorage();
@@ -27,6 +29,7 @@ const upload = multer({
 studentRouter.post("/sign-up", signUp);
 
 studentRouter.get("/single", autherenticateStudent, getUser);
+studentRouter.get("/cv", autherenticateCoordinator, getCvs);
 
 //Add admin Middlewares
 studentRouter.get("/all", autherenticateAdmin, getUsers);

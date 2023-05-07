@@ -12,7 +12,11 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { getInterviewsByCompany } from "../../utils/api/interview.api";
+import {
+    getInterviewsByCompany,
+    updateInterview,
+} from "../../utils/api/interview.api";
+import { getCvByIndex } from "../../utils/api/student.api";
 
 const initialStudents = [
     { interviewId: 1, name: "John", interviewsStatus: "pending", time: "8.45" },
@@ -45,15 +49,50 @@ const StudentListModal = ({ companyId }) => {
     const toast = useToast();
 
     const [students, setStudents] = useState([]);
+    const [loadingAction, setloadingAction] = useState(false);
 
-    const updateStudentStatus = (id, interviewsStatus) => {
+    const updateStudentStatus = async (id, interviewsStatus) => {
         const updatedStudents = students.map((student) =>
             student.interviewId === id
                 ? { ...student, interviewsStatus }
                 : student
         );
-        setStudents(updatedStudents.sort(sortStudents));
+        setloadingAction(true);
+        const _res = await updateInterview({
+            interviewId: id,
+            status: interviewsStatus,
+        });
+        setloadingAction(false);
+        if (_res.error) {
+            return toast({
+                title: "An error occurred.",
+                description: _res.data,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        } else {
+            setStudents(updatedStudents.sort(sortStudents));
+        }
     };
+
+    const [studentCv, setstudentCv] = useState("");
+    const [studentCvLoading, setstudentCvLoading] = useState(false);
+    async function getCvs(indexNumber) {
+        setstudentCvLoading(true);
+        const _res = await getCvByIndex(indexNumber);
+        setstudentCvLoading(false);
+        if (_res.error) {
+            return toast({
+                title: "An error occurred.",
+                description: _res.data,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
+        setstudentCv(_res.data);
+    }
 
     const [loading, setloading] = useState(false);
     const [isChanged, setisChanged] = useState(false);
@@ -62,7 +101,6 @@ const StudentListModal = ({ companyId }) => {
             setloading(true);
             const _res = await getInterviewsByCompany(companyId);
             setloading(false);
-            console.log(_res);
 
             if (_res.error) {
                 return toast({
@@ -85,7 +123,11 @@ const StudentListModal = ({ companyId }) => {
         <Table variant="simple">
             <Tbody>
                 {loading ? (
-                    <Text>Updating...</Text>
+                    <Tr>
+                        <Td>
+                            <Text>Updating...</Text>
+                        </Td>
+                    </Tr>
                 ) : (
                     students.map((student, index) => (
                         <Tr key={index}>
@@ -116,6 +158,8 @@ const StudentListModal = ({ companyId }) => {
                             <Td>
                                 {student.interviewsStatus === "completed" ? (
                                     <Button
+                                        isLoading={loadingAction}
+                                        loadingText={"Loading..."}
                                         size="sm"
                                         onClick={() =>
                                             updateStudentStatus(
@@ -132,6 +176,8 @@ const StudentListModal = ({ companyId }) => {
                                         "onGoing" ? (
                                             <>
                                                 <Button
+                                                    isLoading={loadingAction}
+                                                    loadingText={"Loading..."}
                                                     size="sm"
                                                     mr={2}
                                                     mb={1}
@@ -145,6 +191,8 @@ const StudentListModal = ({ companyId }) => {
                                                     Mark as Completed
                                                 </Button>
                                                 <Button
+                                                    isLoading={loadingAction}
+                                                    loadingText={"Loading..."}
                                                     size="sm"
                                                     mr={2}
                                                     mb={1}
@@ -160,6 +208,8 @@ const StudentListModal = ({ companyId }) => {
                                             </>
                                         ) : (
                                             <Button
+                                                isLoading={loadingAction}
+                                                loadingText={"Loading..."}
                                                 size="sm"
                                                 mr={2}
                                                 onClick={() =>
@@ -176,32 +226,87 @@ const StudentListModal = ({ companyId }) => {
                                 )}
                             </Td>
                             <Td>
-                                <Stack direction={"row"}>
+                                {!studentCv ||
+                                studentCv.indexNumber !== student.studentId ? (
                                     <Button
-                                        variant={"link"}
-                                        colorScheme="facebook"
+                                        isLoading={studentCvLoading}
+                                        loadingText="Loading..."
+                                        onClick={async () =>
+                                            await getCvs(student.studentId)
+                                        }
                                     >
-                                        main
+                                        Get CVs
                                     </Button>
-                                    <Button
-                                        variant={"link"}
-                                        colorScheme="facebook"
-                                    >
-                                        EE
-                                    </Button>
-                                    <Button
-                                        variant={"link"}
-                                        colorScheme="facebook"
-                                    >
-                                        CS
-                                    </Button>
-                                    <Button
-                                        variant={"link"}
-                                        colorScheme="facebook"
-                                    >
-                                        MN
-                                    </Button>
-                                </Stack>
+                                ) : (
+                                    <Stack direction={"row"}>
+                                        <Button
+                                            as={Link}
+                                            target="_blank"
+                                            isDisabled={
+                                                !studentCv || !studentCv.cvURL
+                                            }
+                                            to={studentCv && studentCv.cvURL}
+                                            variant={"link"}
+                                            colorScheme="facebook"
+                                        >
+                                            main
+                                        </Button>
+                                        <Button
+                                            as={Link}
+                                            target="_blank"
+                                            isDisabled={
+                                                !studentCv ||
+                                                !studentCv.CVCategory ||
+                                                !studentCv.CVCategory.EE
+                                            }
+                                            to={
+                                                studentCv &&
+                                                studentCv.CVCategory &&
+                                                studentCv.CVCategory.EE
+                                            }
+                                            variant={"link"}
+                                            colorScheme="facebook"
+                                        >
+                                            EE
+                                        </Button>
+                                        <Button
+                                            as={Link}
+                                            target="_blank"
+                                            isDisabled={
+                                                !studentCv ||
+                                                !studentCv.CVCategory ||
+                                                !studentCv.CVCategory.CS
+                                            }
+                                            to={
+                                                studentCv &&
+                                                studentCv.CVCategory &&
+                                                studentCv.CVCategory.CS
+                                            }
+                                            variant={"link"}
+                                            colorScheme="facebook"
+                                        >
+                                            CS
+                                        </Button>
+                                        <Button
+                                            as={Link}
+                                            target="_blank"
+                                            isDisabled={
+                                                !studentCv ||
+                                                !studentCv.CVCategory ||
+                                                !studentCv.CVCategory.MN
+                                            }
+                                            to={
+                                                studentCv &&
+                                                studentCv.CVCategory &&
+                                                studentCv.CVCategory.MN
+                                            }
+                                            variant={"link"}
+                                            colorScheme="facebook"
+                                        >
+                                            MN
+                                        </Button>
+                                    </Stack>
+                                )}
                             </Td>
                         </Tr>
                     ))

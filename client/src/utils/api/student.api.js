@@ -43,6 +43,7 @@ export async function getStudent(indexNumber) {
         );
     }
 }
+
 export async function updateStudentProfilePicture(imageUrl) {
     try {
         const _res = await base_api.post("/student/update-profile-picture", {
@@ -102,6 +103,16 @@ export async function updateStudentpreferences(formData) {
 export async function getAllStudents() {
     try {
         const _res = await base_api.get("/student/all");
+        return _res.data;
+    } catch (error) {
+        return formatError(error);
+    }
+}
+export async function getCvByIndex(indexNumber) {
+    try {
+        const _res = await base_api.get(
+            "/student/cv?indexNumber=" + indexNumber
+        );
         return _res.data;
     } catch (error) {
         return formatError(error);
