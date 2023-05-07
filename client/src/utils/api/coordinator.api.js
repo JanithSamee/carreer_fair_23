@@ -33,3 +33,11 @@ export async function getCoordinators() {
         return formatError(error);
     }
 }
+export async function getCoordinator() {
+    try {
+        const _res = await base_api.get("/coordinator/get/single");
+        return _res.data;
+    } catch (error) {
+        return formatError(error);
+    }
+}

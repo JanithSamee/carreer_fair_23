@@ -37,6 +37,9 @@ export function AuthProvider({ children }) {
             } else if (_user.role === "admin") {
                 navigate("/admin/dashboard");
                 window.location.reload();
+            } else if (_user.role === "coordinator") {
+                navigate("/coordinator/dashboard");
+                window.location.reload();
             } else {
                 navigate("/tbe");
             }

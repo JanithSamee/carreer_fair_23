@@ -14,65 +14,70 @@ import Navbar from "./components/common/NavBar";
 import { Box } from "@chakra-ui/react";
 import About from "./pages/About";
 import CoDashboard from "./pages/coordinator/CoDashboard";
+import CoordinatorPrivateRoutes from "./utils/providers/CoordinatorPrivateRoutes";
 function App() {
-	return (
-		<Router>
-			<AuthProvider>
-				<Routes>
-					<Route path="/" Component={Login} />
-					<Route path="/signup" Component={SignUp} />
-					<Route
-						path="/company"
-						element={
-							<>
-								<Navbar></Navbar>
-								<Company></Company>
-							</>
-						}
-					/>
-					<Route path="/student">
-						<Route
-							path="dashboard"
-							element={
-								<PrivateStudentRoute>
-									<Navbar></Navbar>
-									<StudentDashboard></StudentDashboard>
-								</PrivateStudentRoute>
-							}
-						/>
-					</Route>
-					<Route path="/admin">
-						<Route
-							path="dashboard"
-							element={
-								<PrivateAdminRoute>
-									<Admin></Admin>
-								</PrivateAdminRoute>
-							}
-						/>
-					</Route>
-					<Route path="*" Component={NotFound} />
-					<Route path="/unauthorized" Component={Unauthorized} />
-					<Route path="/verify-email" Component={VerfyTheEmail} />
-					<Route
-						path="/about"
-						element={
-							<>
-								<Navbar></Navbar>
-								<About></About>
-							</>
-						}
-					/>
-					<Route path="/coordinator">
-						<Route
-							path="dashboard"
-							element={<CoDashboard></CoDashboard>}
-						></Route>
-					</Route>
-				</Routes>
-			</AuthProvider>
-		</Router>
-	);
+    return (
+        <Router>
+            <AuthProvider>
+                <Routes>
+                    <Route path="/" Component={Login} />
+                    <Route path="/signup" Component={SignUp} />
+                    <Route
+                        path="/company"
+                        element={
+                            <>
+                                <Navbar></Navbar>
+                                <Company></Company>
+                            </>
+                        }
+                    />
+                    <Route path="/student">
+                        <Route
+                            path="dashboard"
+                            element={
+                                <PrivateStudentRoute>
+                                    <Navbar></Navbar>
+                                    <StudentDashboard></StudentDashboard>
+                                </PrivateStudentRoute>
+                            }
+                        />
+                    </Route>
+                    <Route path="/admin">
+                        <Route
+                            path="dashboard"
+                            element={
+                                <PrivateAdminRoute>
+                                    <Admin></Admin>
+                                </PrivateAdminRoute>
+                            }
+                        />
+                    </Route>
+                    <Route path="*" Component={NotFound} />
+                    <Route path="/unauthorized" Component={Unauthorized} />
+                    <Route path="/verify-email" Component={VerfyTheEmail} />
+                    <Route
+                        path="/about"
+                        element={
+                            <>
+                                <Navbar></Navbar>
+                                <About></About>
+                            </>
+                        }
+                    />
+                    <Route path="/coordinator">
+                        <Route
+                            path="dashboard"
+                            element={
+                                <CoordinatorPrivateRoutes>
+                                    <CoDashboard></CoDashboard>
+                                </CoordinatorPrivateRoutes>
+                            }
+                        ></Route>
+                    </Route>
+                </Routes>
+            </AuthProvider>
+        </Router>
+    );
 }
 
 export default App;

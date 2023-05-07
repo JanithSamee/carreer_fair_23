@@ -22,7 +22,7 @@ async function getInterviewsByStudent(req, res) {
 }
 async function getInterviewsByCompany(req, res) {
     try {
-        companyId = req.query.companyId;
+        const companyId = req.query.companyId;
         const users = await Interview.getInterviewsByCompany(companyId);
         res.json({ error: false, data: users });
     } catch (error) {
