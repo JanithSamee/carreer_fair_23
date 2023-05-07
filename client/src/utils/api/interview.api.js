@@ -9,6 +9,17 @@ export async function assigneInterview(formData) {
         return formatError(error);
     }
 }
+export async function getInterviewsByStudent(indexNumber) {
+    try {
+        const _res = await base_api.get(
+            "/interview/get-by-student" +
+                (indexNumber ? "?indexNumber=" + indexNumber : "")
+        );
+        return _res.data;
+    } catch (error) {
+        return formatError(error);
+    }
+}
 // export async function addAdmin(formData) {
 //     try {
 //         const _res = await base_api.post("/admin/add", formData);
